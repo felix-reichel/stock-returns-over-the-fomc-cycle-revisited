@@ -1,3 +1,18 @@
 
 .Rhistory
+
+latex/pdfa.xmpi
+
 latex/MAIN.log
+latex/MAIN.aux
+latex/MAIN.bcf
+latex/MAIN.lof
+latex/MAIN.lot
+latex/MAIN.out
+latex/MAIN.run.xml
+latex/MAIN.synctex.gz
+latex/MAIN.toc
+latex/MAIN.xmpdata
+
+latex/cover/coversheet.aux
+latex/mainmatter.log
