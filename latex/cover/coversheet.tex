@@ -1,0 +1,199 @@
+\singlespacing
+\sffamily
+\small
+\setlength{\TPHorizModule}{1mm}
+\setlength{\TPVertModule}{1mm}
+\mbox{}
+
+\begin{textblock}{97}(142,20)
+	\ifeng
+		\includegraphics[width=52mm]{cover/jkuen}
+	\else
+		\includegraphics[width=52mm]{cover/jkude}
+	\fi
+\end{textblock}
+
+\begin{textblock}{85}(155,60)
+	\begin{minipage}[t]{40mm}
+		\begin{flushleft}
+			\ifdefined\elementA
+				{\footnotesize\elementA}
+				\vskip.1mm
+				\ifdefined\elementAA
+					\elementAA
+				\fi
+				\vskip5mm
+			\else
+				\relax
+			\fi
+			\ifdefined\elementB
+				{\footnotesize\elementB}
+				\vskip.1mm
+				\ifdefined\elementBB
+					\elementBB
+				\fi
+				\vskip5mm
+			\else
+				\relax
+			\fi
+			\ifdefined\elementC
+				{\footnotesize\elementC}
+				\vskip.1mm
+				\ifdefined\elementCC
+					\elementCC
+				\fi
+				\vskip5mm
+			\else
+				\relax
+			\fi
+			\ifdefined\elementD
+				{\footnotesize\elementD}
+				\vskip.1mm
+				\ifdefined\elementDD
+					\elementDD
+				\fi
+				\vskip5mm
+			\else
+				\relax
+			\fi
+			\ifdefined\elementE
+				{\footnotesize\elementE}
+				\vskip.1mm
+				\ifdefined\elementEE
+					\elementEE
+				\fi
+				\vskip5mm
+			\else
+				\relax
+			\fi
+			\date
+		\end{flushleft}
+	\end{minipage}
+\end{textblock}
+
+\begin{textblock}{85}(155,260)
+	\begin{minipage}[t]{40mm}
+		{
+			\fontfamily{ugq}
+			\selectfont
+			JOHANNES KEPLER\\
+			\ifeng UNIVERSITY
+			\else UNIVERSITÄT
+			\fi
+			LINZ\\
+		}
+		Altenbergerstraße 69\\
+		4040 Linz, 
+		\ifeng Austria
+		\else Österreich
+		\fi \\
+		www.jku.at\\
+		DVR 0093696
+	\end{minipage}
+\end{textblock}
+
+\begin{textblock}{165}[0,1](30,140)
+	\begin{minipage}[b]{120mm}
+		\fontfamily{ugq}
+		\fontsize{32pt}{32}
+		\selectfont
+		\flushleft
+		\title
+	\end{minipage}
+\end{textblock}
+
+\begin{textblock}{120}(30,150)
+	\includegraphics[width=44mm]{cover/arr}
+\end{textblock}
+
+\begin{textblock}{165}(30,195)
+	\begin{minipage}[t]{120mm}
+		\Large
+		\ifeng
+			\ifcase\type
+				\ifdefined\subtitle
+					\LARGE
+					\subtitle
+				\else
+					\relax
+				\fi
+				\or Bachelor Thesis 
+				\or Master Thesis 
+				\or Doctoral Thesis 
+				\or Diploma Thesis 
+			\fi 
+			\vskip1mm
+			\ifcase\type 
+				\relax 
+			\else 
+				{
+					\normalsize to obtain the academic degree of
+				}
+				\vskip2mm 
+			\fi
+			\ifcase\type
+				\relax 
+			\else 
+				\acadDegree
+				\vskip1mm 
+			\fi 
+			{
+				\normalsize 
+				\ifcase\type
+					\relax 
+					\or in the Bachelor's Program 
+					\or in the Master's Program 
+					\or in the Doctoral Program 
+					\or in the Diploma Program 
+				\fi
+			} 
+			\vskip2mm
+			\ifcase\type 
+				\relax 
+			\else
+				\study 
+			\fi
+		\else
+			\ifcase\type
+				\ifdefined\subtitle
+					\LARGE\subtitle
+				\else
+					\relax
+				\fi
+				\or Bachelorarbeit 
+				\or Masterarbeit 
+				\or Dissertation 
+				\or Diplomarbeit 
+			\fi 
+			\vskip1mm
+			\ifcase\type 
+				\relax 
+			\else
+				{
+					\normalsize zur Erlangung des akademischen Grades
+				}
+				\vskip2mm 
+			\fi
+			\ifcase\type 
+				\relax 
+			\else
+				\acadDegree \vskip1mm 
+			\fi 
+			{
+				\normalsize 
+				\ifcase\type 
+					\relax 
+					\or im Bachelorstudium 
+					\or im Masterstudium 
+					\or im Doktoratsstudium 
+					\or im Diplomstudium 
+				\fi
+			} \vskip2mm
+			\ifcase\type 
+				\relax 
+			\else
+				\study 
+			\fi
+		\fi
+	\end{minipage}
+\end{textblock}
