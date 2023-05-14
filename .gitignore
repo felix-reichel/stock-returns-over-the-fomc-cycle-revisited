@@ -14,5 +14,8 @@ latex/MAIN.synctex.gz
 latex/MAIN.toc
 latex/MAIN.xmpdata
 
+latex/MAIN.blg
+latex/MAIN.bbl
+
 latex/cover/coversheet.aux
 latex/mainmatter.log
