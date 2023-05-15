@@ -20,6 +20,8 @@ eu_ssr <- daily_ssr_estimates$`Euro-area SSR`
 # test plot Euro-area SSR
 plot(x = POSIXct,
      y = eu_ssr,
+     type = "l",
+     lwd = 2,
      xlab = "date",
      ylab = "value",
      main = "Euro-area SSR")
