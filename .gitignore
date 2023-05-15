@@ -19,3 +19,5 @@ latex/MAIN.bbl
 
 latex/cover/coversheet.aux
 latex/mainmatter.log
+latex/MAIN.fdb_latexmk
+latex/MAIN.fls
