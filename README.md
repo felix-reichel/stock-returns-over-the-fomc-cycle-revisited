@@ -15,3 +15,6 @@ Annette Vissing-Jorgensen (earlier UC Berkeley, now FED): https://sites.google.c
 
 CAC-40 Index (missing datapoints weekends & holidays), 14th march 2023 - 20 yrs: https://www.macrotrends.net/2596/cac-40-index-france-historical-chart-data
 
+I.B. Sauer, Das Geldsystem - makroökonomische Grundlagen: https://www.youtube.com/playlist?list=PLTdQGfy4HjbCmZiFyMUOvHQXU26Vb-S-V
+
+Third ECB Annual Research Conference: Session 2: The economics of the Fed put: https://www.youtube.com/watch?v=jeQXGSsk5Ac&list=PLZ300D8zdZ9koXKTjaIOfsHjJx71vH3Sl
