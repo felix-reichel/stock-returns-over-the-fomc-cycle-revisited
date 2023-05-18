@@ -23,8 +23,9 @@ plot(x = POSIXct,
      type = "l",
      lwd = 2,
      xlab = "date",
-     ylab = "value",
+     ylab = "shadow short rate",
      main = "Euro-area SSR")
+abline(h = 0, col="blue")
 
 # simple TODO 1: make the plot nicer
 # simple TODO 2: plot against stock (CAC-40, DAX) index plot
