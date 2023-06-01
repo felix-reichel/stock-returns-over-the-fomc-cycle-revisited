@@ -6,7 +6,7 @@ current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path))
 
 cac40_idx = read.csv(
-  'cac-40-index-france-historical-chart-data.csv', 
+  'data/cac-40-index-france-historical-chart-data.csv', 
   skip = 13, 
   stringsAsFactors = TRUE)
 

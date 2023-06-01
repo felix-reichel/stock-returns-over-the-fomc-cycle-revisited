@@ -1,7 +1,5 @@
-
+.RData
 .Rhistory
-
-latex/pdfa.xmpi
 
 latex/MAIN.log
 latex/MAIN.aux
@@ -13,11 +11,12 @@ latex/MAIN.run.xml
 latex/MAIN.synctex.gz
 latex/MAIN.toc
 latex/MAIN.xmpdata
-
 latex/MAIN.blg
 latex/MAIN.bbl
+latex/MAIN.fdb_latexmk
+latex/MAIN.fls
 
 latex/cover/coversheet.aux
 latex/mainmatter.log
-latex/MAIN.fdb_latexmk
-latex/MAIN.fls
+latex/pdfa.xmpi
+

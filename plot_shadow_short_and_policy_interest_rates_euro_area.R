@@ -8,11 +8,11 @@ setwd(dirname(current_path))
 
 # Read in latest shadow short rate estimates
 daily_ssr_estimates <- read_excel(
-  'SSR_Estimates_20230327.xlsx', 
+  'data/SSR_Estimates_20230327.xlsx', 
   sheet = 4, 
   skip = 19)
 
-ecbmrrfr <- read.csv('ECBMRRFR_(ECB_Main_Refinancing_Operations_Rate).csv')
+ecbmrrfr <- read.csv('data/ECBMRRFR_(ECB_Main_Refinancing_Operations_Rate).csv')
 ecbmrrfr <- ecbmrrfr[ecbmrrfr$ECBMRRFR != '.', ]  
 
 ecb_pir <- read.csv(

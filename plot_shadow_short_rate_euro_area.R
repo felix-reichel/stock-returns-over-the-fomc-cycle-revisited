@@ -10,7 +10,7 @@ setwd(dirname(current_path))
 # Read in latest shadow short rate estimates
 # Jfyi: data already contains weekends & holidays
 daily_ssr_estimates <- read_excel(
-  'SSR_Estimates_20230327.xlsx', 
+  'data/SSR_Estimates_20230327.xlsx', 
   sheet = 4, 
   skip = 19)
 
