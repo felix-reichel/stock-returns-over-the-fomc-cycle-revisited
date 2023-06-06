@@ -154,12 +154,14 @@ df <- data.frame(
   w_t5 = w_t5,
   w_t6 = w_t6,  # even
   # 8th dummy variable for unordinary FOMC cycle times
-  w_ge_t7 = w_tge7,
-  row.names = FALSE
+  w_ge_t7 = w_tge7
 )
 
 # Write csv containing FOMC odd/even week dummies
-write.csv(df, 'data/dates_is_in_even_fomc_week_dummies.csv')
+write.csv(df, 
+          'data/dates_is_in_even_fomc_week_dummies.csv', 
+          row.names = FALSE
+          )
 
 
 
