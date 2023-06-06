@@ -44,15 +44,20 @@ save d:fed_put_datamerged_data, replace
 // Generate date2
 gen date2 = date(date, "YMD")
 
-
 // Drop rows with missing S&P500 values (holidays, weekends)
-drop if missing(sp500_y)
+drop if missing(sp500_d1)
 
-// MLR with 7 binary dummies for the fomc cycle time
-reg sp500_y w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
+// Regression Models
+// *****************
+// MLR with sp500 and 7 binary dummies for the fomc cycle time
+reg sp500 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 // R^2 of only 0.0118
 
+// MLR with sp500 process of differences of order 1 lag 1 and 7 binary dummies for the fomc cycle time
+reg sp500_d1 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
+
+// MLR with sp500 process of differences of order 2 lag 1 and 7 binary dummies for the fomc cycle time
+reg sp500_d2_test w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 
 
 
