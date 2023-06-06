@@ -157,8 +157,22 @@ df <- data.frame(
   w_ge_t7 = w_tge7
 )
 
+
+
+df2 <- data.frame(
+  date = as.Date(dates, origin = lubridate::origin),
+  w_t0 = w_t6,
+  w_t1 = w_t5, 
+  w_t2 = w_t4,
+  w_t3 = w_t3,
+  w_t4 = w_t2,
+  w_t5 = w_t1,
+  w_t6 = w_t0
+)
+
+
 # Write csv containing FOMC odd/even week dummies
-write.csv(df, 
+write.csv(df2, 
           'data/dates_is_in_even_fomc_week_dummies.csv', 
           row.names = FALSE
           )
