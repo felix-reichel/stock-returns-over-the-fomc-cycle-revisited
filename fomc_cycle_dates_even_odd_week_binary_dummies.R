@@ -2,9 +2,14 @@
 is_odd_or_even_date_in_fomc_cycle <- function(fomc_start_date, date) {
   diff_weeks_numeric <- difftime(date, fomc_start_date, units = "weeks")
   diff_weeks_integer <- floor(diff_weeks_numeric)
-  return(as.integer(diff_weeks_integer) %% 2 == 0) 
-  # = TRUE for days in even week within the FOMC Cycle counting from 0. (0,2,4,6)
-  # = FALSE for days in odd week within the FOMC Cycle. (1,3,5,7)
+  # return(as.integer(diff_weeks_integer) %% 2 == 0) 
+  if ( as.integer(diff_weeks_integer) %% 2 == 0 ) {
+    return(1)
+  } else {
+    return(0)
+  }
+  # = TRUE/1 for days in even week within the FOMC Cycle counting from 0. (0,2,4,6)
+  # = FALSE/0 for days in odd week within the FOMC Cycle. (1,3,5)
 }
 
 install.packages('readxl')
@@ -61,7 +66,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
 }
 
 # Create dataframe 
-# with Ex-ante (shifted t-x weeks) dummies where x of integer set {0,1,2,3,4,5,6,7}.
+# with Ex-ante (shifted t-x weeks) dummies where x of integer set {0,1,2,3,4,5,6}.
 dummies_len <- length(is_in_even_fomc_week)
 week_len <- 7
 
@@ -77,15 +82,15 @@ as.Date(dates[dummies_len+1], origin = lubridate::origin)
 
 
 df <- data.frame(
-  date = dates[1 : (dummies_len - (week_len * 7)) ],
+  date = as.Date(dates[1 : (dummies_len - (week_len * 7)) ], origin = lubridate::origin),
   dummy0 = is_in_even_fomc_week[1 : (dummies_len - (week_len * 7)) ],
   dummy1 = is_in_even_fomc_week[((week_len * 1) + 1) : (dummies_len - (week_len * 6))],
   dummy2 = is_in_even_fomc_week[((week_len * 2) + 1) : (dummies_len - (week_len * 5))],
   dummy3 = is_in_even_fomc_week[((week_len * 3) + 1) : (dummies_len - (week_len * 4))],
   dummy4 = is_in_even_fomc_week[((week_len * 4) + 1) : (dummies_len - (week_len * 3))],
   dummy5 = is_in_even_fomc_week[((week_len * 5) + 1) : (dummies_len - (week_len * 2))],
-  dummy6 = is_in_even_fomc_week[((week_len * 6) + 1) : (dummies_len - (week_len * 1))],
-  dummy7 = is_in_even_fomc_week[((week_len * 7) + 1) :  dummies_len]
+  dummy6 = is_in_even_fomc_week[((week_len * 6) + 1) : (dummies_len - (week_len * 1))] # ,
+  # dummy7 = is_in_even_fomc_week[((week_len * 7) + 1) :  dummies_len]
 )
 
 # Write csv containing FOMC odd/even week dummies
