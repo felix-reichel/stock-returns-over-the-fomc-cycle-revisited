@@ -34,39 +34,61 @@ remaining_fomc_start_dates <- as.Date(fomc_start_dates[2:length])
 
 for (next_fomc_start_date in remaining_fomc_start_dates) {
     
-    next_fomc_start_date <- as.Date(next_fomc_start_date, origin = lubridate::origin)
-    prev_fomc_start_date <- as.Date(prev_fomc_start_date, origin = lubridate::origin)
+  next_fomc_start_date <- as.Date(next_fomc_start_date, origin = lubridate::origin)
+  prev_fomc_start_date <- as.Date(prev_fomc_start_date, origin = lubridate::origin)
 
-    # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date ]
-    days_between_fomc_meetings_seq <- seq(prev_fomc_start_date, next_fomc_start_date, "day")
-    
-    # WIP/TODO: There are duplicates because of '[' vs. ']'
-    # see 'data/dates_is_in_even_fomc_week_dummies.csv':
-    #   "50",17610,FALSE
-    #   "51",17610,TRUE
+  next_fomc_start_date_minus_1_day <- ymd(next_fomc_start_date) - days(1)
 
-    for (date in days_between_fomc_meetings_seq) {
+  # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_1_day ]
+  days_between_fomc_meetings_seq <- seq(
+                                        prev_fomc_start_date,
+                                        next_fomc_start_date_minus_1_day,
+                                        "day"
+                                        )
+  for (date in days_between_fomc_meetings_seq) {
 
-      date <- as.Date(date, origin = lubridate::origin)
+    date <- as.Date(date, origin = lubridate::origin)
       
-      in_even_or_odd_week <- is_odd_or_even_date_in_fomc_cycle(
-                                prev_fomc_start_date, 
-                                date)
+    in_even_or_odd_week <- is_odd_or_even_date_in_fomc_cycle(
+                                                            prev_fomc_start_date, 
+                                                            date)
       
-      dates <- c(dates, date)
-      is_in_even_fomc_week <- c(is_in_even_fomc_week, in_even_or_odd_week)
-    
-    }
-    prev_fomc_start_date <- next_fomc_start_date
+    dates <- c(dates, date)
+    is_in_even_fomc_week <- c(is_in_even_fomc_week, in_even_or_odd_week)
+  }
+
+  prev_fomc_start_date <- next_fomc_start_date
 }
 
-# create dataframe
+# Create dataframe 
+# with Ex-ante (shifted t-x weeks) dummies where x of integer set {0,1,2,3,4,5,6,7}.
+dummies_len <- length(is_in_even_fomc_week)
+week_len <- 7
+
+# Testing stored vector dates
+as.Date(dates[1], origin = lubridate::origin)
+# [1] "2018-01-30"
+as.Date(dates[(dummies_len - (week_len * 7))], origin = lubridate::origin)
+# "2023-01-30"
+as.Date(dates[dummies_len], origin = lubridate::origin)
+# "2023-03-20"
+as.Date(dates[dummies_len+1], origin = lubridate::origin)
+# [1] NA
+
+
 df <- data.frame(
-  dates = dates, 
-  is_in_even_fomc_week = is_in_even_fomc_week
+  date = dates[1 : (dummies_len - (week_len * 7)) ],
+  dummy0 = is_in_even_fomc_week[1 : (dummies_len - (week_len * 7)) ],
+  dummy1 = is_in_even_fomc_week[((week_len * 1) + 1) : (dummies_len - (week_len * 6))],
+  dummy2 = is_in_even_fomc_week[((week_len * 2) + 1) : (dummies_len - (week_len * 5))],
+  dummy3 = is_in_even_fomc_week[((week_len * 3) + 1) : (dummies_len - (week_len * 4))],
+  dummy4 = is_in_even_fomc_week[((week_len * 4) + 1) : (dummies_len - (week_len * 3))],
+  dummy5 = is_in_even_fomc_week[((week_len * 5) + 1) : (dummies_len - (week_len * 2))],
+  dummy6 = is_in_even_fomc_week[((week_len * 6) + 1) : (dummies_len - (week_len * 1))],
+  dummy7 = is_in_even_fomc_week[((week_len * 7) + 1) :  dummies_len]
 )
 
-# write csv containing fomc odd/even week dummies
+# Write csv containing FOMC odd/even week dummies
 write.csv(df, 'data/dates_is_in_even_fomc_week_dummies.csv')
 
 

@@ -52,10 +52,10 @@
 
 
 # 3.2 Empirical Evidence of the FED Put after the GFC
-# 3.2.1 Does the "FED" Put exist after the GFC (should not be possible, no abitrage!)
+# 3.2.1 Does the "FED" Put exist after the GFC (should not be possible, no arbitrage!)
 
 
-# Simple linear regression model between ffr and s&p500
+# Simple linear regression model between FFR and s&p500
 # Fed Target Fund Rate
 ffr <- read.csv('data/FEDFUNDS.csv')
 # plot
@@ -69,6 +69,25 @@ plot(x = as.Date(ffr$DATE),
 # Add a black horizontal line
 abline(h = 0, col = "red")
 
+
+# Empirical Evidence for the FED Put after the GFC (2018 till march 2023) using the S&P500 und FOMC cycle time binary dummies:
+
+
+# 6th June 2023 - draft/proposed of the first regression model (empirical evidence of the FED Put):
+# regress: 
+# ŷ *sp500_t = γ0 *w_t-0 + ... + γ7 *w_t-7 + ε_t
+# where:
+# sp500_t ... Time series of the s&p500
+# w_t-0 - w_t-7 ... Ex-ante / t-x ... x=[0,1,2,3,4,5,6,7] shifted binary dummies for odd/even weeks in the FOMC cycle
+# ε_t ... Error term
+
+
+
 # Empirical Evidence for the FED Put using the S&P500 and the FED target fund rate (before/after the GFC)
+
+
+
+
+
 # Empirical Evidence for the FED Put using the S&P500 and the US shadow short rate (before/after the GFC)
 
