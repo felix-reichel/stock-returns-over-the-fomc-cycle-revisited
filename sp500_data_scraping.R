@@ -1,6 +1,9 @@
 require(quantmod)
 require(xts)
 
+current_path = rstudioapi::getActiveDocumentContext()$path
+setwd(dirname(current_path))
+
 # Get S&P500 from 2018-01-30 to 2023-03-20
 getSymbols.FRED(c("SP500"), auto.assign = TRUE, env = globalenv())
 
@@ -35,7 +38,7 @@ plot(xts18mar23, main = "S&P 500")
 
 # Create data.frame
 sp500_df <- data.frame(
-  sp500_x = sp500_x,
+  date = sp500_x,
   sp500_y = sp500_y
 )
 
