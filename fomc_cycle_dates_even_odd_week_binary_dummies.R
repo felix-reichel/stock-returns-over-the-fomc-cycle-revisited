@@ -97,7 +97,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
     w_t3 <- c(w_t3, is_date_in_3_week)
     w_t4 <- c(w_t4, is_date_in_4_week)
     w_t5 <- c(w_t5, is_date_in_5_week)
-    w_t6 <- c(w_t0, is_date_in_6_week)
+    w_t6 <- c(w_t6, is_date_in_6_week)
   }
 
   prev_fomc_start_date <- next_fomc_start_date
@@ -131,16 +131,18 @@ df <- data.frame(
   # dummy7 = is_in_even_fomc_week[((week_len * 7) + 1) :  dummies_len]
 
   date = as.Date(dates, origin = lubridate::origin),
-  w0 = w_t0, # even, w0 ≈/≙ w6? drop w6.
+  w0 = w_t0, # even
   w1 = w_t1, 
   w2 = w_t2, # even
   w3 = w_t3,
   w4 = w_t4, # even
-  w5 = w_t5
-  # w6 = w_t6[1:length(dates)]  # w0 ≈/≙ w6?
+  w5 = w_t5,
+  w6 = w_t6  # even
 )
 
 # Write csv containing FOMC odd/even week dummies
+
+# Jfyi: No dummies for > floor(6) weeks within fomc cycle time
 write.csv(df, 'data/dates_is_in_even_fomc_week_dummies.csv')
 
 
