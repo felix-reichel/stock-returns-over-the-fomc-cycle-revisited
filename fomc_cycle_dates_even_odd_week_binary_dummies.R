@@ -22,6 +22,17 @@ is_date_in_t_floor_week_within_fomc_cycle <- function(fomc_start_date, date, t_f
   }
 }
 
+
+is_date_in_ge_7_floor_week_within_fomc_cycle <- function(fomc_start_date, date) {
+  diff_weeks_numeric <- difftime(date, fomc_start_date, units = "weeks")
+  diff_weeks_integer <- floor(diff_weeks_numeric)
+  if ( diff_weeks_integer >= 7 ) {
+    return(1)
+  } else {
+    return(0)
+  }
+}
+
 install.packages('readxl')
 library(readxl)
 library(lubridate)
@@ -50,6 +61,7 @@ w_t3 <- c()
 w_t4 <- c()
 w_t5 <- c()
 w_t6 <- c()
+w_tge7 <- c()
 
 prev_fomc_start_date <- as.Date(fomc_start_dates[1])  # = First FOMC meeting start date 
 length <- length(fomc_start_dates)
@@ -89,6 +101,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
     is_date_in_4_week <- is_date_in_t_floor_week_within_fomc_cycle(prev_fomc_start_date, date, 4)
     is_date_in_5_week <- is_date_in_t_floor_week_within_fomc_cycle(prev_fomc_start_date, date, 5)
     is_date_in_6_week <- is_date_in_t_floor_week_within_fomc_cycle(prev_fomc_start_date, date, 6)
+    is_date_in_ge7_week <- is_date_in_ge_7_floor_week_within_fomc_cycle(prev_fomc_start_date, date)
     
     # append dummies to vectors
     w_t0 <- c(w_t0, is_date_in_0_week)
@@ -98,6 +111,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
     w_t4 <- c(w_t4, is_date_in_4_week)
     w_t5 <- c(w_t5, is_date_in_5_week)
     w_t6 <- c(w_t6, is_date_in_6_week)
+    w_tge7 <- c(w_tge7, is_date_in_ge7_week)
   }
 
   prev_fomc_start_date <- next_fomc_start_date
@@ -131,18 +145,20 @@ df <- data.frame(
   # dummy7 = is_in_even_fomc_week[((week_len * 7) + 1) :  dummies_len]
 
   date = as.Date(dates, origin = lubridate::origin),
-  w0 = w_t0, # even
-  w1 = w_t1, 
-  w2 = w_t2, # even
-  w3 = w_t3,
-  w4 = w_t4, # even
-  w5 = w_t5,
-  w6 = w_t6  # even
+  # 7 week dummies for approx. 6.5 ordinary FOMC cycle time.
+  w_t0 = w_t0, # even
+  w_t1 = w_t1, 
+  w_t2 = w_t2, # even
+  w_t3 = w_t3,
+  w_t4 = w_t4, # even
+  w_t5 = w_t5,
+  w_t6 = w_t6,  # even
+  # 8th dummy variable for unordinary FOMC cycle times
+  w_ge_t7 = w_tge7,
+  row.names = FALSE
 )
 
 # Write csv containing FOMC odd/even week dummies
-
-# Jfyi: No dummies for > floor(6) weeks within fomc cycle time
 write.csv(df, 'data/dates_is_in_even_fomc_week_dummies.csv')
 
 
