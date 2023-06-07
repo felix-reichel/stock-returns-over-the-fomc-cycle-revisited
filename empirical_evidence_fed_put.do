@@ -59,7 +59,9 @@ reg sp500_d1 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 // MLR with sp500 process of differences of order 2 lag 1 and 7 binary dummies for the fomc cycle time
 reg sp500_d2_test w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 
-
+// MLR with Log-Level regression model
+gen lsp500 = log(sp500)
+reg lsp500 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 
 cap log close
 clear
