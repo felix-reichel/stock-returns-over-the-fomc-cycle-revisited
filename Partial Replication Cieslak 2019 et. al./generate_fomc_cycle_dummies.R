@@ -2,7 +2,7 @@ week_len <- 7
 # Functions
 get_day_in_week_ordinal_rank_within_fomc_cycle <- function(fomc_start_date, date) {
   diff_days <- difftime(date, fomc_start_date, units = "days")
-  return(as.integer(floor(diff_days)) %% week_len * 2 ))
+  return(as.integer(floor(diff_days)) %% week_len * 2 )
 }
 
 
