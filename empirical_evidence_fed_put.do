@@ -36,8 +36,15 @@ sort date
 // save .dta
 save d:sp500_data, replace
 
+// Load US SSR data .csv
+import delimited "data/us_ssr_df.csv", clear
+// Order data by date
+sort date
+// save .dta
+save d:us_ssr_data, replace
+
 // Merge 1:1 Using date
-merge date using d:fomc_data d:sp500_data
+merge date using d:fomc_data d:sp500_data d:us_ssr_data
 // Save new merged data .dta
 save d:fed_put_datamerged_data, replace
 
@@ -62,6 +69,10 @@ reg sp500_d2_test w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 // MLR with Log-Level regression model
 gen lsp500 = log(sp500)
 reg lsp500 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
+
+reg sp500 us_ssr
+reg lsp500 us_ssr
+
 
 cap log close
 clear
