@@ -19,6 +19,12 @@ is_date_in_greater_or_equal_7_floor_week_within_fomc_cycle <- function(fomc_star
   }
 }
 
+get_floor_week_within_fomc_cycle <- function(fomc_start_date, date) {
+  diff_weeks_numeric <- difftime(date, fomc_start_date, units = "weeks")
+  return(floor(diff_weeks_numeric))
+}
+
+
 install.packages('readxl')
 library(readxl)
 library(lubridate)
@@ -46,6 +52,8 @@ w_t4 <- c()
 w_t5 <- c()
 w_t6 <- c()
 w_tge7 <- c()
+fomc_w_floor <- c()
+fomc_w_plus <- c()
 
 prev_fomc_start_date <- as.Date(fomc_start_dates[1])  # = First FOMC meeting start date 
 length <- length(fomc_start_dates)
@@ -79,6 +87,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
     is_date_in_5_week <- is_date_in_t_floor_week_within_fomc_cycle(prev_fomc_start_date, date, 5)
     is_date_in_6_week <- is_date_in_t_floor_week_within_fomc_cycle(prev_fomc_start_date, date, 6)
     is_date_in_ge7_week <- is_date_in_greater_or_equal_7_floor_week_within_fomc_cycle(prev_fomc_start_date, date)
+    fomc_week <- get_floor_week_within_fomc_cycle(prev_fomc_start_date, date)
     
     # append dummies to vectors
     w_t0 <- c(w_t0, is_date_in_0_week)
@@ -89,16 +98,19 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
     w_t5 <- c(w_t5, is_date_in_5_week)
     w_t6 <- c(w_t6, is_date_in_6_week)
     w_tge7 <- c(w_tge7, is_date_in_ge7_week)
+    fomc_w_floor <- c(fomc_w_floor, fomc_week)
+    fomc_w_plus <- c(fomc_w_plus, fomc_week+1)
+
   }
 
   prev_fomc_start_date <- next_fomc_start_date
 }
 
-# Create dataframe 
-week_len <- 7
 
 df <- data.frame(
   date = as.Date(dates, origin = lubridate::origin),
+  fomc_w_floor = fomc_w_floor,
+  fomc_w_plus = fomc_w_plus,
   w_t0 = w_t6,
   w_t1 = w_t5, 
   w_t2 = w_t4,
@@ -109,5 +121,5 @@ df <- data.frame(
 )
 
 # Write csv containing FOMC odd/even week dummies
-write.csv(df, 'data/dates_is_in_even_fomc_week_dummies.csv', row.names = FALSE)
+write.csv(df, 'data/fomc_week_dummies.csv', row.names = FALSE)
 
