@@ -114,6 +114,46 @@ di "p-value =" %9.3f Ftail(k+1,n-2*(k+1),fstat)
 // fits the data better than two seperate regression models for odd/even weeks within the FOMC cycle.
 
 
+// Chow test on some other regression models
+// Pooled vs. separate estimation
+qui reg lsp500 us_ssr if even_fomc_week == 1, robust
+scalar define SSRm = e(rss) // SSR for in even FOMC weeks
+qui reg lsp500 us_ssr if even_fomc_week == 0, robust
+scalar def SSRf = e(rss) // SSR for in odd FOMC weeks
+scalar def k = e(df_m) // k parameters
+qui reg lsp500 us_ssr if !missing(even_fomc_week), robust
+scalar def SSRp = e(rss) // SSR pooled
+qui count if e(sample)
+scalar def n = r(N) // n observations
+scalar list
+
+// Compute the Chow test statistic (= F statistic):
+scalar def fstat=((SSRp-(SSRm+SSRf))/(SSRm+SSRf))*(n-2*(k+1))/(k+1)
+di "F = " %9.3f fstat
+di "critical value =" %9.3f invFtail(k+1,n-2*(k+1),0.05)
+di "p-value =" %9.3f Ftail(k+1,n-2*(k+1),fstat)
+// p-value = 0.573 > 0.05
+
+// Pooled vs. separate estimation
+qui reg lsp500 date2 if even_fomc_week == 1, robust
+scalar define SSRm = e(rss) // SSR for in even FOMC weeks
+qui reg lsp500 date2 if even_fomc_week == 0, robust
+scalar def SSRf = e(rss) // SSR for in odd FOMC weeks
+scalar def k = e(df_m) // k parameters
+qui reg lsp500 date2 if !missing(even_fomc_week), robust
+scalar def SSRp = e(rss) // SSR pooled
+qui count if e(sample)
+scalar def n = r(N) // n observations
+scalar list
+
+// Compute the Chow test statistic (= F statistic):
+scalar def fstat=((SSRp-(SSRm+SSRf))/(SSRm+SSRf))*(n-2*(k+1))/(k+1)
+di "F = " %9.3f fstat
+di "critical value =" %9.3f invFtail(k+1,n-2*(k+1),0.05)
+di "p-value =" %9.3f Ftail(k+1,n-2*(k+1),fstat)
+// p-value = 0.288 > 0.05
+
+
 
 cap log close
 clear
