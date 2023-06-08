@@ -89,32 +89,70 @@ save d:fed_put_datamerged_data, replace
 // Generate date2
 gen date2 = date(date, "YMD")
 
+// drop last 6 rows and first 6 rows
+drop if date2 >= 20794
+drop if date2 <= 19758
+
 // Drop rows with missing S&P500 values (holidays, weekends)
 drop if missing(sp500_d1)
 
-// Generate even/odd FOMC dummies
-gen even_fomc_week = 0
-replace even_fomc_week = 1 if fomc_w_floor == 0 | fomc_w_floor == 2 | fomc_w_floor == 4 | fomc_w_floor == 6
 
-gen odd_fomc_week = 0
-replace odd_fomc_week = 1 if fomc_w_floor == 1 | fomc_w_floor == 3 | fomc_w_floor == 5 | fomc_w_floor == 7
+// drop if missing(w_t0)
+
+
+
+// MLR
+// i.w_t4 + i.w_t5 = sat+son.
+
+reg sp500_5day_fw_diff w_t0_e w_t1_e w_t2_e w_t3_e w_t6_e w_t0_o w_t1_o w_t2_o w_t3_o w_t6_o 
+
+
+
+gen lsp500_lag5_bw = log(sp500_lag5_bw)
+
+reg sp500_lag5_fw_d1 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o 
+
+reg lsp500_lag5_bw w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o 
+
+reg sp500 date2 fomc_even_w
+
 
 
 
 // MLR with Log-Level regression model
 gen lsp500 = log(sp500)
-reg lsp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
 
-reg lsp500 date2 i.even_fomc_week
-reg lsp500 date2 i.odd_fomc_week
+
+// reg lsp500 w_t0 w_t1 w_t2 w_t5 w_t6
+
+reg lsp500 date2 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o if fomc_even_w == 1
+
+reg lsp500 date2 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o if fomc_even_w == 0
+
+reg sp500 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o
+
+
+reg lsp500 date2 i.fomc_even_w##(i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6) // i.w_t4 + i.w_t5 = sat+son.
+reg lsp500 date2 i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6 if fomc_even_w == 1
+
+reg lsp500 date2 fomc_even_w##(i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6)
+
+margins
+// reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 1
+// reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 0
+
+
+
+
+
 
 // Pooled vs. separate estimation
-qui reg lsp500 date2 if even_fomc_week == 1, robust
+qui reg lsp500 date2 if fomc_even_w == 1, robust
 scalar define SSRm = e(rss) // SSR for in even FOMC weeks
-qui reg lsp500 date2 if even_fomc_week == 0, robust
+qui reg lsp500 date2 if fomc_even_w == 0, robust
 scalar def SSRf = e(rss) // SSR for in odd FOMC weeks
 scalar def k = e(df_m) // k parameters
-qui reg lsp500 date2 if !missing(even_fomc_week), robust
+qui reg lsp500 date2 if !missing(fomc_even_w), robust
 scalar def SSRp = e(rss) // SSR pooled
 qui count if e(sample)
 scalar def n = r(N) // n observations
@@ -125,7 +163,9 @@ scalar def fstat=((SSRp-(SSRm+SSRf))/(SSRm+SSRf))*(n-2*(k+1))/(k+1)
 di "F = " %9.3f fstat
 di "critical value =" %9.3f invFtail(k+1,n-2*(k+1),0.05)
 di "p-value =" %9.3f Ftail(k+1,n-2*(k+1),fstat)
-// p-value = 0.970 > 0.05
+
+
+// p-value = 0.991 > 0.05
 // => Therefore H0 can NOT be rejected, meaning a pooled regression model 
 // fits the data better than two seperate regression models for odd/even weeks within the FOMC cycle.
 

@@ -3,12 +3,12 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/felixreichel/Documents/UNI/WIWI_Bachelor/2023S/SE Bachelorarbeit/Git/Partial Replication Cieslak 2019 et. al./stata_fed_put/stata_fed_put.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res} 8 Jun 2023, 17:02:54
+ {txt}opened on:  {res} 9 Jun 2023, 00:23:17
 {txt}
 {com}. 
 . // Load FOMC cycle dummies .csv
 . import delimited "fomc_week_dummies_2014_2016.csv", clear
-{res}{text}(10 vars, 1050 obs)
+{res}{text}(16 vars, 1050 obs)
 
 {com}. // Order master data by date
 . sort date
@@ -20,7 +20,7 @@
 {com}. 
 . // Load SP500 data .csv
 . import delimited "sp500_df_2014_2016.csv", clear
-{res}{text}(3 vars, 727 obs)
+{res}{text}(9 vars, 727 obs)
 
 {com}. // Order data by date
 . sort date
@@ -55,51 +55,52 @@
 . gen date2 = date(date, "YMD")
 {txt}
 {com}. 
+. // drop last 6 rows and first 6 rows
+. drop if date2 >= 20794
+{txt}(8 observations deleted)
+
+{com}. drop if date2 <= 19758
+{txt}(8 observations deleted)
+
+{com}. 
 . // Drop rows with missing S&P500 values (holidays, weekends)
 . drop if missing(sp500_d1)
-{txt}(324 observations deleted)
+{txt}(320 observations deleted)
 
 {com}. 
-. // Generate even/odd FOMC dummies
-. gen even_fomc_week = 0
-{txt}
-{com}. replace even_fomc_week = 1 if fomc_w_floor == 0 | fomc_w_floor == 2 | fomc_w_floor == 4 | fomc_w_floor == 6
-{txt}(384 real changes made)
-
-{com}. 
-. gen odd_fomc_week = 0
-{txt}
-{com}. replace odd_fomc_week = 1 if fomc_w_floor == 1 | fomc_w_floor == 3 | fomc_w_floor == 5 | fomc_w_floor == 7
-{txt}(342 real changes made)
-
-{com}. 
+. 
+. // drop if missing(w_t0)
+. 
 {txt}end of do-file
 
 {com}. do "/var/folders/hf/g0s_93555pz7fv66ncnr3v7r0000gn/T//SD45872.000000"
 {txt}
-{com}. gen lsp500 = log(sp500)
-{txt}
-{com}. reg lsp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
+{com}. // i.w_t4 + i.w_t5 = sat+son.
+. 
+. reg sp500_5day_fw_diff date2 w_t0_e w_t1_e w_t2_e w_t3_e w_t6_e w_t0_o w_t1_o w_t2_o w_t3_o w_t6_o 
 
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}    86.64
-{txt}       Model {c |} {res} .895464444         8  .111933056   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} .926308557       717  .001291923   {txt}R-squared       ={res}    0.4915
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4859
-{txt}       Total {c |} {res}   1.821773       725   .00251279   {txt}Root MSE        =   {res} .03594
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       715
+{txt}{hline 13}{c +}{hline 34}   F(11, 703)      = {res}     1.48
+{txt}       Model {c |} {res} 9495.79658        11  863.254235   {txt}Prob > F        ={res}    0.1358
+{txt}    Residual {c |} {res} 411392.052       703  585.194953   {txt}R-squared       ={res}    0.0226
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0073
+{txt}       Total {c |} {res} 420887.849       714   589.47878   {txt}Root MSE        =   {res} 24.191
 
 {txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}      lsp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{col 1}sp500_5day~f{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
 {hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}    0.000{col 26}{space 2}    0.000{col 37}{space 1}   25.81{col 46}{space 3}0.000{col 54}{space 4}    0.000{col 67}{space 3}    0.000
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.006{col 26}{space 2}    0.016{col 37}{space 1}    0.37{col 46}{space 3}0.715{col 54}{space 4}   -0.025{col 67}{space 3}    0.036
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}    0.010{col 26}{space 2}    0.015{col 37}{space 1}    0.67{col 46}{space 3}0.504{col 54}{space 4}   -0.020{col 67}{space 3}    0.040
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.29{col 46}{space 3}0.769{col 54}{space 4}   -0.025{col 67}{space 3}    0.034
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.14{col 46}{space 3}0.892{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.24{col 46}{space 3}0.812{col 54}{space 4}   -0.026{col 67}{space 3}    0.033
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -0.000{col 26}{space 2}    0.015{col 37}{space 1}   -0.02{col 46}{space 3}0.987{col 54}{space 4}   -0.030{col 67}{space 3}    0.029
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    5.289{col 26}{space 2}    0.093{col 37}{space 1}   56.99{col 46}{space 3}0.000{col 54}{space 4}    5.106{col 67}{space 3}    5.471
+{space 7}date2 {c |}{col 14}{res}{space 2}    0.001{col 26}{space 2}    0.003{col 37}{space 1}    0.35{col 46}{space 3}0.724{col 54}{space 4}   -0.005{col 67}{space 3}    0.007
+{txt}{space 6}w_t0_e {c |}{col 14}{res}{space 2}   -1.898{col 26}{space 2}   10.248{col 37}{space 1}   -0.19{col 46}{space 3}0.853{col 54}{space 4}  -22.019{col 67}{space 3}   18.223
+{txt}{space 6}w_t1_e {c |}{col 14}{res}{space 2}   -6.976{col 26}{space 2}   10.248{col 37}{space 1}   -0.68{col 46}{space 3}0.496{col 54}{space 4}  -27.097{col 67}{space 3}   13.145
+{txt}{space 6}w_t2_e {c |}{col 14}{res}{space 2}   -6.077{col 26}{space 2}   10.262{col 37}{space 1}   -0.59{col 46}{space 3}0.554{col 54}{space 4}  -26.225{col 67}{space 3}   14.071
+{txt}{space 6}w_t3_e {c |}{col 14}{res}{space 2}  -10.473{col 26}{space 2}   10.288{col 37}{space 1}   -1.02{col 46}{space 3}0.309{col 54}{space 4}  -30.673{col 67}{space 3}    9.726
+{txt}{space 6}w_t6_e {c |}{col 14}{res}{space 2}   -1.632{col 26}{space 2}   10.288{col 37}{space 1}   -0.16{col 46}{space 3}0.874{col 54}{space 4}  -21.832{col 67}{space 3}   18.567
+{txt}{space 6}w_t0_o {c |}{col 14}{res}{space 2}   -7.430{col 26}{space 2}   10.300{col 37}{space 1}   -0.72{col 46}{space 3}0.471{col 54}{space 4}  -27.652{col 67}{space 3}   12.791
+{txt}{space 6}w_t1_o {c |}{col 14}{res}{space 2}   -2.420{col 26}{space 2}   10.300{col 37}{space 1}   -0.23{col 46}{space 3}0.814{col 54}{space 4}  -22.643{col 67}{space 3}   17.803
+{txt}{space 6}w_t2_o {c |}{col 14}{res}{space 2}   -3.534{col 26}{space 2}   10.313{col 37}{space 1}   -0.34{col 46}{space 3}0.732{col 54}{space 4}  -23.782{col 67}{space 3}   16.713
+{txt}{space 6}w_t3_o {c |}{col 14}{res}{space 2}    1.249{col 26}{space 2}   10.333{col 37}{space 1}    0.12{col 46}{space 3}0.904{col 54}{space 4}  -19.039{col 67}{space 3}   21.537
+{txt}{space 6}w_t6_o {c |}{col 14}{res}{space 2}  -10.142{col 26}{space 2}   10.332{col 37}{space 1}   -0.98{col 46}{space 3}0.327{col 54}{space 4}  -30.428{col 67}{space 3}   10.143
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  -16.775{col 26}{space 2}   62.428{col 37}{space 1}   -0.27{col 46}{space 3}0.788{col 54}{space 4} -139.342{col 67}{space 3}  105.792
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
@@ -107,154 +108,31 @@
 
 {com}. do "/var/folders/hf/g0s_93555pz7fv66ncnr3v7r0000gn/T//SD45872.000000"
 {txt}
-{com}. reg lsp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
+{com}. // i.w_t4 + i.w_t5 = sat+son.
+. 
+. reg sp500_5day_fw_diff w_t0_e w_t1_e w_t2_e w_t3_e w_t6_e w_t0_o w_t1_o w_t2_o w_t3_o w_t6_o 
 
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}    86.64
-{txt}       Model {c |} {res} .895464444         8  .111933056   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} .926308557       717  .001291923   {txt}R-squared       ={res}    0.4915
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4859
-{txt}       Total {c |} {res}   1.821773       725   .00251279   {txt}Root MSE        =   {res} .03594
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}      lsp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}    0.000{col 26}{space 2}    0.000{col 37}{space 1}   25.81{col 46}{space 3}0.000{col 54}{space 4}    0.000{col 67}{space 3}    0.000
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.006{col 26}{space 2}    0.016{col 37}{space 1}    0.37{col 46}{space 3}0.715{col 54}{space 4}   -0.025{col 67}{space 3}    0.036
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}    0.010{col 26}{space 2}    0.015{col 37}{space 1}    0.67{col 46}{space 3}0.504{col 54}{space 4}   -0.020{col 67}{space 3}    0.040
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.29{col 46}{space 3}0.769{col 54}{space 4}   -0.025{col 67}{space 3}    0.034
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.14{col 46}{space 3}0.892{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.24{col 46}{space 3}0.812{col 54}{space 4}   -0.026{col 67}{space 3}    0.033
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -0.000{col 26}{space 2}    0.015{col 37}{space 1}   -0.02{col 46}{space 3}0.987{col 54}{space 4}   -0.030{col 67}{space 3}    0.029
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    5.289{col 26}{space 2}    0.093{col 37}{space 1}   56.99{col 46}{space 3}0.000{col 54}{space 4}    5.106{col 67}{space 3}    5.471
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
-. reg sp500_d1 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}     0.53
-{txt}       Model {c |} {res} 1224.58821         8  153.073526   {txt}Prob > F        ={res}    0.8379
-{txt}    Residual {c |} {res} 208936.918       717  291.404348   {txt}R-squared       ={res}    0.0058
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}   -0.0053
-{txt}       Total {c |} {res} 210161.506       725  289.877939   {txt}Root MSE        =   {res} 17.071
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       715
+{txt}{hline 13}{c +}{hline 34}   F(10, 704)      = {res}     1.61
+{txt}       Model {c |} {res} 9422.80626        10  942.280626   {txt}Prob > F        ={res}    0.0988
+{txt}    Residual {c |} {res} 411465.043       704   584.46739   {txt}R-squared       ={res}    0.0224
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0085
+{txt}       Total {c |} {res} 420887.849       714   589.47878   {txt}Root MSE        =   {res} 24.176
 
 {txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}    sp500_d1{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{col 1}sp500_5day~f{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
 {hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}   -0.000{col 26}{space 2}    0.002{col 37}{space 1}   -0.05{col 46}{space 3}0.957{col 54}{space 4}   -0.004{col 67}{space 3}    0.004
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}   -7.237{col 26}{space 2}    7.413{col 37}{space 1}   -0.98{col 46}{space 3}0.329{col 54}{space 4}  -21.791{col 67}{space 3}    7.317
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}   -4.313{col 26}{space 2}    7.198{col 37}{space 1}   -0.60{col 46}{space 3}0.549{col 54}{space 4}  -18.444{col 67}{space 3}    9.819
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}   -2.086{col 26}{space 2}    7.201{col 37}{space 1}   -0.29{col 46}{space 3}0.772{col 54}{space 4}  -16.223{col 67}{space 3}   12.050
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}   -5.418{col 26}{space 2}    7.197{col 37}{space 1}   -0.75{col 46}{space 3}0.452{col 54}{space 4}  -19.547{col 67}{space 3}    8.711
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}   -4.704{col 26}{space 2}    7.207{col 37}{space 1}   -0.65{col 46}{space 3}0.514{col 54}{space 4}  -18.854{col 67}{space 3}    9.446
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -4.386{col 26}{space 2}    7.198{col 37}{space 1}   -0.61{col 46}{space 3}0.543{col 54}{space 4}  -18.517{col 67}{space 3}    9.745
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}   -4.245{col 26}{space 2}    7.194{col 37}{space 1}   -0.59{col 46}{space 3}0.555{col 54}{space 4}  -18.370{col 67}{space 3}    9.879
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    7.320{col 26}{space 2}   44.072{col 37}{space 1}    0.17{col 46}{space 3}0.868{col 54}{space 4}  -79.206{col 67}{space 3}   93.845
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
-{txt}end of do-file
-
-{com}. do "/var/folders/hf/g0s_93555pz7fv66ncnr3v7r0000gn/T//SD45872.000000"
-{txt}
-{com}. reg lsp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}    86.64
-{txt}       Model {c |} {res} .895464444         8  .111933056   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} .926308557       717  .001291923   {txt}R-squared       ={res}    0.4915
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4859
-{txt}       Total {c |} {res}   1.821773       725   .00251279   {txt}Root MSE        =   {res} .03594
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}      lsp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}    0.000{col 26}{space 2}    0.000{col 37}{space 1}   25.81{col 46}{space 3}0.000{col 54}{space 4}    0.000{col 67}{space 3}    0.000
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.006{col 26}{space 2}    0.016{col 37}{space 1}    0.37{col 46}{space 3}0.715{col 54}{space 4}   -0.025{col 67}{space 3}    0.036
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}    0.010{col 26}{space 2}    0.015{col 37}{space 1}    0.67{col 46}{space 3}0.504{col 54}{space 4}   -0.020{col 67}{space 3}    0.040
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.29{col 46}{space 3}0.769{col 54}{space 4}   -0.025{col 67}{space 3}    0.034
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.14{col 46}{space 3}0.892{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.24{col 46}{space 3}0.812{col 54}{space 4}   -0.026{col 67}{space 3}    0.033
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -0.000{col 26}{space 2}    0.015{col 37}{space 1}   -0.02{col 46}{space 3}0.987{col 54}{space 4}   -0.030{col 67}{space 3}    0.029
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    5.289{col 26}{space 2}    0.093{col 37}{space 1}   56.99{col 46}{space 3}0.000{col 54}{space 4}    5.106{col 67}{space 3}    5.471
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
-. reg sp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}    88.39
-{txt}       Model {c |} {res} 3634072.14         8  454259.017   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res}  3684987.5       717  5139.45259   {txt}R-squared       ={res}    0.4965
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4909
-{txt}       Total {c |} {res} 7319059.64       725  10095.2547   {txt}Root MSE        =   {res}  71.69
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}       sp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}    0.231{col 26}{space 2}    0.009{col 37}{space 1}   26.08{col 46}{space 3}0.000{col 54}{space 4}    0.213{col 67}{space 3}    0.248
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}    9.809{col 26}{space 2}   31.133{col 37}{space 1}    0.32{col 46}{space 3}0.753{col 54}{space 4}  -51.314{col 67}{space 3}   70.931
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}   19.962{col 26}{space 2}   30.228{col 37}{space 1}    0.66{col 46}{space 3}0.509{col 54}{space 4}  -39.385{col 67}{space 3}   79.309
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    8.847{col 26}{space 2}   30.240{col 37}{space 1}    0.29{col 46}{space 3}0.770{col 54}{space 4}  -50.522{col 67}{space 3}   68.216
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}    3.666{col 26}{space 2}   30.223{col 37}{space 1}    0.12{col 46}{space 3}0.904{col 54}{space 4}  -55.671{col 67}{space 3}   63.002
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    6.851{col 26}{space 2}   30.268{col 37}{space 1}    0.23{col 46}{space 3}0.821{col 54}{space 4}  -52.574{col 67}{space 3}   66.275
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -0.481{col 26}{space 2}   30.227{col 37}{space 1}   -0.02{col 46}{space 3}0.987{col 54}{space 4}  -59.825{col 67}{space 3}   58.864
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}    3.190{col 26}{space 2}   30.214{col 37}{space 1}    0.11{col 46}{space 3}0.916{col 54}{space 4}  -56.127{col 67}{space 3}   62.508
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}-2656.729{col 26}{space 2}  185.086{col 37}{space 1}  -14.35{col 46}{space 3}0.000{col 54}{space 4}-3020.104{col 67}{space 3}-2293.355
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
-{txt}end of do-file
-
-{com}. do "/var/folders/hf/g0s_93555pz7fv66ncnr3v7r0000gn/T//SD45872.000000"
-{txt}
-{com}. reg lsp500 date2 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(8, 717)       = {res}    86.64
-{txt}       Model {c |} {res} .895464444         8  .111933056   {txt}Prob > F        ={res}    0.0000
-{txt}    Residual {c |} {res} .926308557       717  .001291923   {txt}R-squared       ={res}    0.4915
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.4859
-{txt}       Total {c |} {res}   1.821773       725   .00251279   {txt}Root MSE        =   {res} .03594
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}      lsp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 7}date2 {c |}{col 14}{res}{space 2}    0.000{col 26}{space 2}    0.000{col 37}{space 1}   25.81{col 46}{space 3}0.000{col 54}{space 4}    0.000{col 67}{space 3}    0.000
-{txt}{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.006{col 26}{space 2}    0.016{col 37}{space 1}    0.37{col 46}{space 3}0.715{col 54}{space 4}   -0.025{col 67}{space 3}    0.036
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}    0.010{col 26}{space 2}    0.015{col 37}{space 1}    0.67{col 46}{space 3}0.504{col 54}{space 4}   -0.020{col 67}{space 3}    0.040
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.29{col 46}{space 3}0.769{col 54}{space 4}   -0.025{col 67}{space 3}    0.034
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.14{col 46}{space 3}0.892{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    0.004{col 26}{space 2}    0.015{col 37}{space 1}    0.24{col 46}{space 3}0.812{col 54}{space 4}   -0.026{col 67}{space 3}    0.033
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}   -0.000{col 26}{space 2}    0.015{col 37}{space 1}   -0.02{col 46}{space 3}0.987{col 54}{space 4}   -0.030{col 67}{space 3}    0.029
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}    0.002{col 26}{space 2}    0.015{col 37}{space 1}    0.12{col 46}{space 3}0.906{col 54}{space 4}   -0.028{col 67}{space 3}    0.032
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    5.289{col 26}{space 2}    0.093{col 37}{space 1}   56.99{col 46}{space 3}0.000{col 54}{space 4}    5.106{col 67}{space 3}    5.471
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
-. reg sp500 w_t0 w_t1 w_t2 w_t3 w_t4 w_t5 w_t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       726
-{txt}{hline 13}{c +}{hline 34}   F(7, 718)       = {res}     1.98
-{txt}       Model {c |} {res} 138635.324         7  19805.0463   {txt}Prob > F        ={res}    0.0553
-{txt}    Residual {c |} {res} 7180424.32       718   10000.591   {txt}R-squared       ={res}    0.0189
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0094
-{txt}       Total {c |} {res} 7319059.64       725  10095.2547   {txt}Root MSE        =   {res}    100
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}       sp500{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 8}w_t0 {c |}{col 14}{res}{space 2}  -72.222{col 26}{space 2}   43.206{col 37}{space 1}   -1.67{col 46}{space 3}0.095{col 54}{space 4} -157.048{col 67}{space 3}   12.603
-{txt}{space 8}w_t1 {c |}{col 14}{res}{space 2}  -58.916{col 26}{space 2}   41.955{col 37}{space 1}   -1.40{col 46}{space 3}0.161{col 54}{space 4} -141.285{col 67}{space 3}   23.453
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}  -74.725{col 26}{space 2}   41.945{col 37}{space 1}   -1.78{col 46}{space 3}0.075{col 54}{space 4} -157.074{col 67}{space 3}    7.624
-{txt}{space 8}w_t3 {c |}{col 14}{res}{space 2}  -82.779{col 26}{space 2}   41.905{col 37}{space 1}   -1.98{col 46}{space 3}0.049{col 54}{space 4} -165.050{col 67}{space 3}   -0.507
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}  -80.047{col 26}{space 2}   41.966{col 37}{space 1}   -1.91{col 46}{space 3}0.057{col 54}{space 4} -162.437{col 67}{space 3}    2.343
-{txt}{space 8}w_t5 {c |}{col 14}{res}{space 2}  -95.209{col 26}{space 2}   41.860{col 37}{space 1}   -2.27{col 46}{space 3}0.023{col 54}{space 4} -177.391{col 67}{space 3}  -13.027
-{txt}{space 8}w_t6 {c |}{col 14}{res}{space 2}  -92.491{col 26}{space 2}   41.834{col 37}{space 1}   -2.21{col 46}{space 3}0.027{col 54}{space 4} -174.624{col 67}{space 3}  -10.359
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2} 2109.403{col 26}{space 2}   40.826{col 37}{space 1}   51.67{col 46}{space 3}0.000{col 54}{space 4} 2029.251{col 67}{space 3} 2189.556
+{space 6}w_t0_e {c |}{col 14}{res}{space 2}   -2.003{col 26}{space 2}   10.238{col 37}{space 1}   -0.20{col 46}{space 3}0.845{col 54}{space 4}  -22.103{col 67}{space 3}   18.097
+{txt}{space 6}w_t1_e {c |}{col 14}{res}{space 2}   -7.079{col 26}{space 2}   10.238{col 37}{space 1}   -0.69{col 46}{space 3}0.489{col 54}{space 4}  -27.179{col 67}{space 3}   13.021
+{txt}{space 6}w_t2_e {c |}{col 14}{res}{space 2}   -6.176{col 26}{space 2}   10.252{col 37}{space 1}   -0.60{col 46}{space 3}0.547{col 54}{space 4}  -26.304{col 67}{space 3}   13.952
+{txt}{space 6}w_t3_e {c |}{col 14}{res}{space 2}  -10.568{col 26}{space 2}   10.278{col 37}{space 1}   -1.03{col 46}{space 3}0.304{col 54}{space 4}  -30.748{col 67}{space 3}    9.612
+{txt}{space 6}w_t6_e {c |}{col 14}{res}{space 2}   -1.730{col 26}{space 2}   10.278{col 37}{space 1}   -0.17{col 46}{space 3}0.866{col 54}{space 4}  -21.910{col 67}{space 3}   18.449
+{txt}{space 6}w_t0_o {c |}{col 14}{res}{space 2}   -7.524{col 26}{space 2}   10.290{col 37}{space 1}   -0.73{col 46}{space 3}0.465{col 54}{space 4}  -27.726{col 67}{space 3}   12.679
+{txt}{space 6}w_t1_o {c |}{col 14}{res}{space 2}   -2.521{col 26}{space 2}   10.290{col 37}{space 1}   -0.25{col 46}{space 3}0.807{col 54}{space 4}  -22.724{col 67}{space 3}   17.681
+{txt}{space 6}w_t2_o {c |}{col 14}{res}{space 2}   -3.639{col 26}{space 2}   10.302{col 37}{space 1}   -0.35{col 46}{space 3}0.724{col 54}{space 4}  -23.866{col 67}{space 3}   16.587
+{txt}{space 6}w_t3_o {c |}{col 14}{res}{space 2}    1.138{col 26}{space 2}   10.322{col 37}{space 1}    0.11{col 46}{space 3}0.912{col 54}{space 4}  -19.128{col 67}{space 3}   21.403
+{txt}{space 6}w_t6_o {c |}{col 14}{res}{space 2}  -10.241{col 26}{space 2}   10.322{col 37}{space 1}   -0.99{col 46}{space 3}0.321{col 54}{space 4}  -30.506{col 67}{space 3}   10.025
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}    4.995{col 26}{space 2}    9.870{col 37}{space 1}    0.51{col 46}{space 3}0.613{col 54}{space 4}  -14.383{col 67}{space 3}   24.373
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
