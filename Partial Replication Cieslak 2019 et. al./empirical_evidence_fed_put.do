@@ -67,11 +67,19 @@ sort date
 save d:fomc_data, replace
 
 // Load SP500 data .csv
-import delimited "sp500_df_2014_2016.csv", clear
+// import delimited "sp500_df_2014_2016.csv", clear
+// Order data by date
+// sort date
+// save .dta
+// save d:sp500_data, replace
+
+
+// Load SP500 data .csv
+import delimited "us_returns_df_2014_2016.csv", clear
 // Order data by date
 sort date
 // save .dta
-save d:sp500_data, replace
+save d:us_returns_data, replace
 
 // Load US SSR data .csv
 // import delimited "data/us_ssr_df.csv", clear
@@ -82,7 +90,9 @@ save d:sp500_data, replace
 
 // Merge 1:1 Using date
 // merge date using d:fomc_data d:sp500_data d:us_ssr_data
-merge date using d:fomc_data d:sp500_data
+
+merge date using d:fomc_data d:us_returns_data
+
 // Save new merged data .dta
 save d:fed_put_datamerged_data, replace
 
@@ -90,11 +100,11 @@ save d:fed_put_datamerged_data, replace
 gen date2 = date(date, "YMD")
 
 // drop last 6 rows and first 6 rows
-drop if date2 >= 20794
-drop if date2 <= 19758
+//drop if date2 >= 20794
+// drop if date2 <= 19758
 
 // Drop rows with missing S&P500 values (holidays, weekends)
-drop if missing(sp500_d1)
+drop if missing(mktrf)
 
 
 // drop if missing(w_t0)
@@ -102,11 +112,18 @@ drop if missing(sp500_d1)
 
 
 // MLR
+
+reg mktrf fomc_even_w
+
+
+
 // i.w_t4 + i.w_t5 = sat+son.
 
+
+
+
+
 reg sp500_5day_fw_diff w_t0_e w_t1_e w_t2_e w_t3_e w_t6_e w_t0_o w_t1_o w_t2_o w_t3_o w_t6_o 
-
-
 
 gen lsp500_lag5_bw = log(sp500_lag5_bw)
 
@@ -115,8 +132,6 @@ reg sp500_lag5_fw_d1 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t
 reg lsp500_lag5_bw w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o 
 
 reg sp500 date2 fomc_even_w
-
-
 
 
 // MLR with Log-Level regression model
@@ -140,9 +155,6 @@ reg lsp500 date2 fomc_even_w##(i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6)
 margins
 // reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 1
 // reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 0
-
-
-
 
 
 
