@@ -41,7 +41,7 @@ set scheme s1mono // set scheme for graphs
 		emphasizing flexibility, explaining policy, learning from the market, and disagreement among Fed officials. 
 		
 		Only learning from the private financial sector could have bene- fits from a public policy perspective, 
-		but any such benefits must be balanced against the risk of insider trading and informal communication undermining 
+		but any such benefits must be balanced against the risk of insider trading and informal communication undermining  
 		the public’s trust in financial markets and the Fed.
 		
 		Initial submission: June 13, 2016; Accepted: May 9, 2018 Editors: Stefan Nagel, Philip Bond, Amit Seru, and Wei Xiong
@@ -68,11 +68,11 @@ save d:fomc_data, replace
 
 
 // Load SP500 data .csv
-//import delimited "sp500_df_2014_2016.csv", clear
+import delimited "sp500_df_2014_2016.csv", clear
 // Order data by date
-//sort date
+sort date
 // save .dta
-//save d:us_returns_data, replace
+save d:sp500_data, replace
 
 // Load SP500 data .csv
 import delimited "us_returns_df_2010_2016.csv", clear
@@ -81,7 +81,7 @@ sort date
 // save .dta
 save d:us_returns_data, replace
 
-merge date using d:fomc_data d:us_returns_data
+merge date using d:fomc_data d:us_returns_data d:sp500_data
 
 // Save new merged data .dta
 save d:fed_put_datamerged_data, replace
@@ -89,26 +89,32 @@ save d:fed_put_datamerged_data, replace
 // Generate date2
 gen date2 = date(date, "YMD")
 
-// Drop rows with missing S&P500 values (holidays, weekends)
-// drop if missing(sp500)
-drop if missing(w_t0)
+// For 2014 to 2016
+drop if date2 <= 19723
 
-gen w_odd=0
 
-replace w_odd=1 if w_even==0
+lgraph mktrfavg5d fomc_d
+
+
+
+
 
 
 // MLR
-lgraph rf fomc_d if fomc_d >= -1 & fomc_d <= 33
+
+drop if missing(w_t0)
+
+drop if missing(sp500)
 
 
 
+reg mktrf w_t0 w_t2t4t6
+
+reg mktrfavg5d w_t0
+
+reg mktrfavg5d w_t2t4t6
 
 
-
-
-
-reg mktrf 
 
 cap log close
 clear

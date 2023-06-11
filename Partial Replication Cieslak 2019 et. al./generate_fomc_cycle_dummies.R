@@ -39,7 +39,7 @@ get_fomc_day_within_fomc_cycle <- function(fomc_meeting_date, date) {
   weekday_of_fomc_meeting_date <- wday(fomc_meeting_date, week_start = monday)
   difftime_days <- as.integer(difftime(date, fomc_meeting_date, units = "days"))
   occured_weekends <- get_difftime_weeks(fomc_meeting_date, date)
-  fomc_day_within_fomc_cycle <- difftime_days - (weekend_duration * occured_weekends)
+  fomc_day_within_fomc_cycle <- as.integer(difftime_days - (weekend_duration * occured_weekends))
   return(fomc_day_within_fomc_cycle)
 }
 
@@ -95,12 +95,12 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
   next_fomc_start_date <- as.Date(next_fomc_start_date, origin = lubridate::origin)
   prev_fomc_start_date <- as.Date(prev_fomc_start_date, origin = lubridate::origin)
   
-  next_fomc_start_date_minus_3_day <- ymd(next_fomc_start_date) - days(3)
+  next_fomc_start_date_minus_2_day <- ymd(next_fomc_start_date) - days(2)
   
-  # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_3_day ]
+  # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_2_day ]
   days_between_fomc_meetings_seq <- seq(
-    prev_fomc_start_date - days(2),
-    next_fomc_start_date_minus_3_day,
+    prev_fomc_start_date - days(1),
+    next_fomc_start_date_minus_2_day,
     "day"
   )
   for (date in days_between_fomc_meetings_seq) {

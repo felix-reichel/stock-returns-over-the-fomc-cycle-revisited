@@ -10,7 +10,7 @@ setwd(dirname(current_path))
 getSymbols.FRED(c("SP500"), auto.assign = TRUE, env = globalenv())
 
 # Jfyi: Data misses holidays and weekends
-xtsJan14dec16 <- SP500["2014-01-28/2016-12-13"]
+xtsJan14dec16 <- SP500["2014-01-01/2016-12-31"]
 
 # Omit NA values
 xtsJan14dec16 <- na.omit(xtsJan14dec16)
@@ -81,22 +81,22 @@ mean(diff(vec_diff_blue_black[0:700]))
 # Create data.frame
 sp500_df <- data.frame(
   date = index(xtsJan14dec16),
-  sp500 = sp500,#
+  sp500 = sp500#,#
   
   
-  sp500_d1 = round(c(sp500_d1, 0), digits = 2),
+  #sp500_d1 = round(c(sp500_d1, 0), digits = 2),
   
-  sp500_lag5_fw = sp500_lag5_fw_ts, # shift sp500 5 days forward,
+  #sp500_lag5_fw = sp500_lag5_fw_ts, # shift sp500 5 days forward,
   
-  sp500_lag5_bw = sp500_lag5_bw_ts, # shift sp500 5 days backward
+  #sp500_lag5_bw = sp500_lag5_bw_ts, # shift sp500 5 days backward
   
-  sp500_lag5_fw_d1 = round(c(diff(sp500_lag5_fw_ts), 0), digits = 2),
+  #sp500_lag5_fw_d1 = round(c(diff(sp500_lag5_fw_ts), 0), digits = 2),
   
-  sp500_lag5_bw_d1 = round(c(diff(sp500_lag5_bw_ts), 0), digits = 2),
+  #sp500_lag5_bw_d1 = round(c(diff(sp500_lag5_bw_ts), 0), digits = 2),
   
-  sp500_5day_fw = round(vec_diff_blue_black, digits = 2),
+  #sp500_5day_fw = round(vec_diff_blue_black, digits = 2),
   
-  sp500_5day_fw_diff = round(c(diff(vec_diff_blue_black), 0), digits = 2)
+  #sp500_5day_fw_diff = round(c(diff(vec_diff_blue_black), 0), digits = 2)
 
 )
 
