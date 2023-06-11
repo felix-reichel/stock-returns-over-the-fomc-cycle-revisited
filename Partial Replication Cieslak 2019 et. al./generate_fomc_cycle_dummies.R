@@ -2,7 +2,7 @@ library(readxl)
 library(lubridate)
 
 # FOMC cycle week definitions
-fomc_wm1 <- c(-6:-2)
+# fomc_wm1 <- c(-6:-2)
 fomc_w0 <- c(-1:3)
 fomc_w1 <- c(4:8)
 fomc_w2 <- c(9:13)
@@ -10,10 +10,9 @@ fomc_w3 <- c(14:18)
 fomc_w4 <- c(19:23)
 fomc_w5 <- c(24:28)
 fomc_w6 <- c(29:33)
-fomc_w7 <- c(34:38)
+# fomc_w7 <- c(34:38)
 
-
-fomc_cycle <- c(fomc_wm1, fomc_w0, fomc_w1, fomc_w2, fomc_w3, fomc_w4, fomc_w5, fomc_w6, fomc_w7)
+fomc_cycle <- c(fomc_w0, fomc_w1, fomc_w2, fomc_w3, fomc_w4, fomc_w5, fomc_w6)
 
 monday <- 1
 saturday <- 6
@@ -52,9 +51,6 @@ get_next_dummy_value <- function(fomc_cycle_day, fomc_w) {
   }
 }
 
-
-
-
 current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path))
 
@@ -66,8 +62,6 @@ fomc_data <- read_excel(
   col_types = c("date", "date", "text"),
   skip = 10)
 
-# us_returns_df <- read.csv('us_returns_df_2014_2016.csv')
-
 dates <- c()
 
 # FOMC cycle week dummies
@@ -78,10 +72,10 @@ w_t3 <- c()
 w_t4 <- c()
 w_t5 <- c()
 w_t6 <- c()
-w_t7 <- c()
+# w_t7 <- c()
 w_cluster <- c()
 fomc_d <- c()
-w_tm1 <- c()
+# w_tm1 <- c()
 w_even <- c()
 w_t2t4t6 <- c()
 
@@ -120,6 +114,11 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
         
         dates <- c(dates, date)
         
+        fomc_d <- c(fomc_d, fomc_cycle_day)
+        w_cluster <- c(w_cluster, get_difftime_weeks(first_fomc_start_date, date) + 1)
+        w_even <- c(w_even, get_next_dummy_value(fomc_cycle_day, c(fomc_w0, fomc_w2, fomc_w4, fomc_w6)))
+        w_t2t4t6 <- c(w_t2t4t6, get_next_dummy_value(fomc_cycle_day, c(fomc_w2, fomc_w4, fomc_w6)))
+        
         w_t0 <- c(w_t0, get_next_dummy_value(fomc_cycle_day, fomc_w0))
         w_t1 <- c(w_t1, get_next_dummy_value(fomc_cycle_day, fomc_w1))
         w_t2 <- c(w_t2, get_next_dummy_value(fomc_cycle_day, fomc_w2))
@@ -127,12 +126,11 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
         w_t4 <- c(w_t4, get_next_dummy_value(fomc_cycle_day, fomc_w4))
         w_t5 <- c(w_t5, get_next_dummy_value(fomc_cycle_day, fomc_w5))
         w_t6 <- c(w_t6, get_next_dummy_value(fomc_cycle_day, fomc_w6))
-        w_t7 <- c(w_t7, get_next_dummy_value(fomc_cycle_day, fomc_w7))
-        w_cluster <- c(w_cluster, get_difftime_weeks(first_fomc_start_date, date) + 1)
-        fomc_d <- c(fomc_d, fomc_cycle_day)
-        w_tm1 <- c(w_tm1, get_next_dummy_value(fomc_cycle_day, fomc_wm1))
-        w_even <- c(w_even, get_next_dummy_value(fomc_cycle_day, c(fomc_w0, fomc_w2, fomc_w4, fomc_w6)))
-        w_t2t4t6 <- c(w_t2t4t6, get_next_dummy_value(fomc_cycle_day, c(fomc_w2, fomc_w4, fomc_w6)))
+        # w_t7 <- c(w_t7, get_next_dummy_value(fomc_cycle_day, fomc_w7))
+        # w_tm1 <- c(w_tm1, get_next_dummy_value(fomc_cycle_day, fomc_wm1))
+
+
+
       }
     }
   }
@@ -149,9 +147,9 @@ df <- data.frame(
   w_t4 = w_t4,
   w_t5 = w_t5,
   w_t6 = w_t6,
-  w_t7 = w_t7,
+  # w_t7 = w_t7,
   w_cluster = w_cluster,
-  w_tm1 = w_tm1,
+  # w_tm1 = w_tm1,
   fomc_d = fomc_d,
   w_even = w_even,
   w_t2t4t6 = w_t2t4t6
