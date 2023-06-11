@@ -60,14 +60,22 @@ cap mkdir stata_fed_put // generate a sub-folder "stata"
 log using "stata_fed_put/stata_fed_put", replace
 
 // Load FOMC cycle dummies .csv
-import delimited "fomc_week_dummies_2014_2016.csv", clear
+import delimited "fomc_week_dummies_2010_2016.csv", clear
 // Order master data by date
 sort date
 // save .dta
 save d:fomc_data, replace
 
+
 // Load SP500 data .csv
-import delimited "us_returns_df_2014_2016.csv", clear
+//import delimited "sp500_df_2014_2016.csv", clear
+// Order data by date
+//sort date
+// save .dta
+//save d:us_returns_data, replace
+
+// Load SP500 data .csv
+import delimited "us_returns_df_2010_2016.csv", clear
 // Order data by date
 sort date
 // save .dta
@@ -82,25 +90,16 @@ save d:fed_put_datamerged_data, replace
 gen date2 = date(date, "YMD")
 
 // Drop rows with missing S&P500 values (holidays, weekends)
-drop if missing(mktrf)
-
+// drop if missing(sp500)
 drop if missing(w_t0)
 
 gen w_odd=0
+
 replace w_odd=1 if w_even==0
 
 
-mean(mktrf) if w_even==0
-mean(mktrf) if w_even==1
-
-reg mktrf w_t0 w_t2t4t6
-reg mktrf c.fomc_d
-
-
-
-lgraph mktrf fomc_d
-lgraph smb fomc_d
-lgraph hml fomc_d
+// MLR
+lgraph rf fomc_d if fomc_d >= -1 & fomc_d <= 33
 
 
 
