@@ -90,7 +90,7 @@ save d:fed_put_datamerged_data, replace
 gen date2 = date(date, "YMD")
 
 // For 2014 to 2016
-drop if date2 <= 19723
+//drop if date2 <= 19723
 
 
 lgraph mktrfavg5d fomc_d
@@ -105,6 +105,19 @@ lgraph mktrfavg5d fomc_d
 drop if missing(w_t0)
 
 drop if missing(sp500)
+
+
+//Expected Return = Risk-free rate + (Beta*Market risk premium)
+
+//                             = Rf + β(Rm – Rf)
+
+
+//Excess return = Total return – Expected return
+
+//Applying the expected return formula to the above:
+
+ //                      = Tr – Rf + β(Rm – Rf)
+
 
 
 
