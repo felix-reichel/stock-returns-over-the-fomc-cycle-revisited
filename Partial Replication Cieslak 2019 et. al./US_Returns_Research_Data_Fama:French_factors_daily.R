@@ -8,7 +8,7 @@ us_returns <- read.csv('F-F_Research_Data_Factors_daily.CSV',
 date_format <- "%Y%m%d"
 us_returns_dates <- as.Date(x = us_returns$DATE, format = date_format)
 
-x1_date <- as.Date("2014-01-02")
+x1_date <- as.Date("2010-01-25")
 x2_date <- as.Date("2016-12-30")
 x1_idx <- which(us_returns_dates == x1_date)
 x2_idx <- which(us_returns_dates == x2_date)
@@ -22,4 +22,4 @@ us_returns_df <- data.frame(
 ) 
 
 # Write csv
-write.csv(us_returns_df, 'us_returns_df_2014_2016.csv', row.names = FALSE)
+write.csv(us_returns_df, 'us_returns_df_2010_2016.csv', row.names = FALSE)

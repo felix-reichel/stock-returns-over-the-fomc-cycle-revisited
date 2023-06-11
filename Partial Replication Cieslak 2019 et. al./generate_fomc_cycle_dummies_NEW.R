@@ -26,22 +26,21 @@ weekend_duration <- 2
 #  return(difftime_days)
 #}
 
-get_fomc_day_within_fomc_cycle <- function(fomc_meeting_date, date) {
+get_difftime_weeks <- function(fomc_meeting_date, date) {
+  weekday_of_fomc_meeting_date <- wday(fomc_meeting_date, week_start = monday)
+  adjusted_fomc_meeting_date <- fomc_meeting_date - days(weekday_of_fomc_meeting_date)
+  return(floor(difftime(date, adjusted_fomc_meeting_date, units = "weeks")))
+}
 
+get_fomc_day_within_fomc_cycle <- function(fomc_meeting_date, date) {
   weekday_of_date <- wday(date, week_start = monday)
-  
   if (weekday_of_date == saturday | weekday_of_date == sunday) {
     return(NULL)
   } 
-  
   weekday_of_fomc_meeting_date <- wday(fomc_meeting_date, week_start = monday)
-  
   difftime_days <- as.integer(difftime(date, fomc_meeting_date, units = "days"))
-
-  occured_weekends <- floor(difftime(date, fomc_meeting_date - days(weekday_of_fomc_meeting_date), units = "weeks"))
- 
+  occured_weekends <- get_difftime_weeks(fomc_meeting_date, date)
   fomc_day_within_fomc_cycle <- difftime_days - (weekend_duration * occured_weekends)
-
   return(fomc_day_within_fomc_cycle)
 }
 
@@ -53,12 +52,15 @@ get_next_dummy_value <- function(fomc_cycle_day, fomc_w) {
   }
 }
 
+
+
+
 current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path))
 
 
 fomc_data <- read_excel(
-  '../data/FOMC_Cycle_dates_2014_2016.xlsx', 
+  '../data/FOMC_Cycle_dates_2010_2016.xlsx', 
   sheet = 1,
   col_names = c("Startdate", "Enddate", "Notes"),
   col_types = c("date", "date", "text"),
@@ -77,6 +79,7 @@ w_t4 <- c()
 w_t5 <- c()
 w_t6 <- c()
 w_t7 <- c()
+w_cluster <- c()
 fomc_d <- c()
 w_tm1 <- c()
 w_even <- c()
@@ -85,7 +88,8 @@ w_t2t4t6 <- c()
 
 fomc_start_dates <- rev(fomc_data$Startdate) # Reverse FOMC start dates in .xlsx File
 
-prev_fomc_start_date <- as.Date(fomc_start_dates[1])  # = First FOMC meeting start date 
+first_fomc_start_date <- as.Date(fomc_start_dates[1])
+prev_fomc_start_date <- first_fomc_start_date # = First FOMC meeting start date 
 
 length <- length(fomc_start_dates)
 
@@ -99,7 +103,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
   
   next_fomc_start_date_minus_3_day <- ymd(next_fomc_start_date) - days(3)
   
-  # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_9_day ]
+  # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_3_day ]
   days_between_fomc_meetings_seq <- seq(
     prev_fomc_start_date - days(2),
     next_fomc_start_date_minus_3_day,
@@ -124,6 +128,7 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
         w_t5 <- c(w_t5, get_next_dummy_value(fomc_cycle_day, fomc_w5))
         w_t6 <- c(w_t6, get_next_dummy_value(fomc_cycle_day, fomc_w6))
         w_t7 <- c(w_t7, get_next_dummy_value(fomc_cycle_day, fomc_w7))
+        w_cluster <- c(w_cluster, get_difftime_weeks(first_fomc_start_date, date) + 1)
         fomc_d <- c(fomc_d, fomc_cycle_day)
         w_tm1 <- c(w_tm1, get_next_dummy_value(fomc_cycle_day, fomc_wm1))
         w_even <- c(w_even, get_next_dummy_value(fomc_cycle_day, c(fomc_w0, fomc_w2, fomc_w4, fomc_w6)))
@@ -145,6 +150,7 @@ df <- data.frame(
   w_t5 = w_t5,
   w_t6 = w_t6,
   w_t7 = w_t7,
+  w_cluster = w_cluster,
   w_tm1 = w_tm1,
   fomc_d = fomc_d,
   w_even = w_even,
@@ -152,7 +158,14 @@ df <- data.frame(
 )
 
 # Write csv containing FOMC dummies
-write.csv(df, 'fomc_week_dummies_2014_2016.csv', row.names = FALSE)
+write.csv(df, 'fomc_week_dummies_2010_2016.csv', row.names = FALSE)
+
+
+
+
+
+
+
 
 
 
