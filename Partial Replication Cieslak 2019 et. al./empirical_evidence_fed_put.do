@@ -67,29 +67,11 @@ sort date
 save d:fomc_data, replace
 
 // Load SP500 data .csv
-// import delimited "sp500_df_2014_2016.csv", clear
-// Order data by date
-// sort date
-// save .dta
-// save d:sp500_data, replace
-
-
-// Load SP500 data .csv
 import delimited "us_returns_df_2014_2016.csv", clear
 // Order data by date
 sort date
 // save .dta
 save d:us_returns_data, replace
-
-// Load US SSR data .csv
-// import delimited "data/us_ssr_df.csv", clear
-// Order data by date
-// sort date
-// save .dta
-// save d:us_ssr_data, replace
-
-// Merge 1:1 Using date
-// merge date using d:fomc_data d:sp500_data d:us_ssr_data
 
 merge date using d:fomc_data d:us_returns_data
 
@@ -99,87 +81,35 @@ save d:fed_put_datamerged_data, replace
 // Generate date2
 gen date2 = date(date, "YMD")
 
-// drop last 6 rows and first 6 rows
-//drop if date2 >= 20794
-// drop if date2 <= 19758
-
 // Drop rows with missing S&P500 values (holidays, weekends)
 drop if missing(mktrf)
 
+drop if missing(w_t0)
 
-// drop if missing(w_t0)
-
-
-
-// MLR
-
-reg mktrf fomc_even_w
+gen w_odd=0
+replace w_odd=1 if w_even==0
 
 
+mean(mktrf) if w_even==0
+mean(mktrf) if w_even==1
 
-// i.w_t4 + i.w_t5 = sat+son.
-
+reg mktrf w_t0 w_t2t4t6
+reg mktrf c.fomc_d
 
 
 
-
-reg sp500_5day_fw_diff w_t0_e w_t1_e w_t2_e w_t3_e w_t6_e w_t0_o w_t1_o w_t2_o w_t3_o w_t6_o 
-
-gen lsp500_lag5_bw = log(sp500_lag5_bw)
-
-reg sp500_lag5_fw_d1 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o 
-
-reg lsp500_lag5_bw w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o 
-
-reg sp500 date2 fomc_even_w
-
-
-// MLR with Log-Level regression model
-gen lsp500 = log(sp500)
-
-
-// reg lsp500 w_t0 w_t1 w_t2 w_t5 w_t6
-
-reg lsp500 date2 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o if fomc_even_w == 1
-
-reg lsp500 date2 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o if fomc_even_w == 0
-
-reg sp500 w_t0_e w_t1_e w_t2_e w_t5_e w_t6_e w_t0_o w_t1_o w_t2_o w_t5_o w_t6_o
-
-
-reg lsp500 date2 i.fomc_even_w##(i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6) // i.w_t4 + i.w_t5 = sat+son.
-reg lsp500 date2 i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6 if fomc_even_w == 1
-
-reg lsp500 date2 fomc_even_w##(i.w_t0 i.w_t1 i.w_t2 i.w_t3 i.w_t6)
-
-margins
-// reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 1
-// reg lsp500 date2 w_t0 w_t1 w_t2 w_t5 w_t6 if fomc_even_w == 0
+lgraph mktrf fomc_d
+lgraph smb fomc_d
+lgraph hml fomc_d
 
 
 
-// Pooled vs. separate estimation
-qui reg lsp500 date2 if fomc_even_w == 1, robust
-scalar define SSRm = e(rss) // SSR for in even FOMC weeks
-qui reg lsp500 date2 if fomc_even_w == 0, robust
-scalar def SSRf = e(rss) // SSR for in odd FOMC weeks
-scalar def k = e(df_m) // k parameters
-qui reg lsp500 date2 if !missing(fomc_even_w), robust
-scalar def SSRp = e(rss) // SSR pooled
-qui count if e(sample)
-scalar def n = r(N) // n observations
-scalar list
-
-// Compute the Chow test statistic (= F statistic):
-scalar def fstat=((SSRp-(SSRm+SSRf))/(SSRm+SSRf))*(n-2*(k+1))/(k+1)
-di "F = " %9.3f fstat
-di "critical value =" %9.3f invFtail(k+1,n-2*(k+1),0.05)
-di "p-value =" %9.3f Ftail(k+1,n-2*(k+1),fstat)
 
 
-// p-value = 0.991 > 0.05
-// => Therefore H0 can NOT be rejected, meaning a pooled regression model 
-// fits the data better than two seperate regression models for odd/even weeks within the FOMC cycle.
+
+
+
+reg mktrf 
 
 cap log close
 clear

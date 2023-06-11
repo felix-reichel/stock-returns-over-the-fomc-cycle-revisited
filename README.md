@@ -11,6 +11,8 @@ Key ECB interest rates: https://www.ecb.europa.eu/stats/policy_and_exchange_rate
 
 Leo Krippner's Homepage, Shadow Short Rate (SSR): https://www.ljkmfa.com/visitors/
 
+Kenneth R. French - Data Library. U.S. Research Returns Data. Fama/French 3 Factors: http://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
+
 Annette Vissing-Jorgensen (earlier UC Berkeley, now FED): https://sites.google.com/view/annette-vissing-jorgensen
 
 CAC-40 Index (missing datapoints weekends & holidays), 14th march 2023 - 20 yrs: https://www.macrotrends.net/2596/cac-40-index-france-historical-chart-data
@@ -18,3 +20,5 @@ CAC-40 Index (missing datapoints weekends & holidays), 14th march 2023 - 20 yrs:
 I.B. Sauer, Das Geldsystem - makroökonomische Grundlagen: https://www.youtube.com/playlist?list=PLTdQGfy4HjbCmZiFyMUOvHQXU26Vb-S-V
 
 Third ECB Annual Research Conference: Session 2: The economics of the Fed put: https://www.youtube.com/watch?v=jeQXGSsk5Ac&list=PLZ300D8zdZ9koXKTjaIOfsHjJx71vH3Sl
+
+
