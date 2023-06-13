@@ -3,20 +3,20 @@ library(readxl)
 current_path = rstudioapi::getActiveDocumentContext()$path
 setwd(dirname(current_path))
 
-# us_returns <- read.csv('F-F_Research_Data_Factors_daily.CSV', col.names = c("DATE", "Mkt-RF", "SMB", "HML", "RF"), skip = 4)
+us_returns2 <- read.csv('F-F_Research_Data_Factors_daily.CSV', col.names = c("DATE", "Mkt-RF", "SMB", "HML", "RF"), skip = 4)
 
 
-us_returns2 <- read_excel(
-  'North_America_3_Factors_Daily.xlsx', 
-  sheet = 1,
-  col_names = c("DATE",
-                "Mkt-RF",
-                "SMB", 
-                "HML", 
-                "RF", 
-                "Avg. 5d fw Mkt-RF"),
-  col_types = c("text", "numeric", "numeric", "numeric", "numeric", "numeric"),
-  skip = 8)
+#us_returns2 <- read_excel(
+#  'North_America_3_Factors_Daily.xlsx', 
+#  sheet = 1,
+#  col_names = c("DATE",
+#                "Mkt-RF",
+#                "SMB", 
+#                "HML", 
+#                "RF", 
+#                "Avg. 5d fw Mkt-RF"),
+#  col_types = c("text", "numeric", "numeric", "numeric", "numeric", "numeric"),
+#  skip = 8)
 
 
 
@@ -32,11 +32,11 @@ x2_idx <- which(us_returns_dates == x2_date)
 
 us_returns_df <- data.frame(
   date = us_returns_dates[x1_idx:x2_idx],
-  Mkt.RF = us_returns2$`Mkt-RF`[x1_idx:x2_idx],
+  Mkt.RF = us_returns2$Mkt.RF[x1_idx:x2_idx],
   SMB = us_returns2$SMB[x1_idx:x2_idx],
   HML = us_returns2$HML[x1_idx:x2_idx],
-  RF = us_returns2$RF[x1_idx:x2_idx],
-  Mkt.RF.avg5d = us_returns2$`Avg. 5d fw Mkt-RF`[x1_idx:x2_idx]
+  RF = us_returns2$RF[x1_idx:x2_idx]#,
+  #Mkt.RF.avg5d = us_returns2$`Avg. 5d fw Mkt-RF`[x1_idx:x2_idx]
 )
 
 

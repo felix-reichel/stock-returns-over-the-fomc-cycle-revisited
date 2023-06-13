@@ -2,7 +2,7 @@ library(readxl)
 library(lubridate)
 
 # FOMC cycle week definitions
-# fomc_wm1 <- c(-6:-2)
+fomc_wm1 <- c(-6:-2)
 fomc_w0 <- c(-1:3)
 fomc_w1 <- c(4:8)
 fomc_w2 <- c(9:13)
@@ -12,7 +12,7 @@ fomc_w5 <- c(24:28)
 fomc_w6 <- c(29:33)
 # fomc_w7 <- c(34:38)
 
-fomc_cycle <- c(fomc_w0, fomc_w1, fomc_w2, fomc_w3, fomc_w4, fomc_w5, fomc_w6)
+fomc_cycle <- c(fomc_wm1, fomc_w0, fomc_w1, fomc_w2, fomc_w3, fomc_w4, fomc_w5, fomc_w6)
 
 monday <- 1
 saturday <- 6
@@ -56,10 +56,10 @@ setwd(dirname(current_path))
 
 
 fomc_data <- read_excel(
-  '../data/FOMC_Cycle_dates_2010_2016.xlsx', 
+  '../data/FOMC_Cycle_dates_2014_2016.xlsx', 
   sheet = 1,
-  col_names = c("Startdate", "Enddate", "Notes"),
-  col_types = c("date", "date", "text"),
+  col_names = c("Startdate", "Enddate"),
+  col_types = c("date", "date"),
   skip = 10)
 
 dates <- c()
@@ -75,14 +75,17 @@ w_t6 <- c()
 # w_t7 <- c()
 w_cluster <- c()
 fomc_d <- c()
-# w_tm1 <- c()
+w_tm1 <- c()
 w_even <- c()
 w_t2t4t6 <- c()
 
 
-fomc_start_dates <- rev(fomc_data$Startdate) # Reverse FOMC start dates in .xlsx File
+fomc_start_dates <- rev(fomc_data$Enddate) # Reverse FOMC end dates in .xlsx File
 
 first_fomc_start_date <- as.Date(fomc_start_dates[1])
+                             
+adj_first_fomc_start_date <- ymd(first_fomc_start_date) - days(as.integer(wday(first_fomc_start_date, week_start = monday))) - days(7)
+
 prev_fomc_start_date <- first_fomc_start_date # = First FOMC meeting start date 
 
 length <- length(fomc_start_dates)
@@ -90,19 +93,26 @@ length <- length(fomc_start_dates)
 remaining_fomc_start_dates <- as.Date(fomc_start_dates[2:length])
 
 
+
+
+
+
 for (next_fomc_start_date in remaining_fomc_start_dates) {
   
   next_fomc_start_date <- as.Date(next_fomc_start_date, origin = lubridate::origin)
   prev_fomc_start_date <- as.Date(prev_fomc_start_date, origin = lubridate::origin)
   
-  next_fomc_start_date_minus_2_day <- ymd(next_fomc_start_date) - days(2)
+  adj_prev_fomc_start_date <- ymd(prev_fomc_start_date) - days(as.integer(wday(prev_fomc_start_date, week_start = monday))) - days(7)
+  adj_next_fomc_start_date <- ymd(next_fomc_start_date) - days(as.integer(wday(next_fomc_start_date, week_start = monday))) - days(7)
+  
   
   # create sequence for days in [ prev_fomc_start_date, next_fomc_start_date_minus_2_day ]
   days_between_fomc_meetings_seq <- seq(
-    prev_fomc_start_date - days(1),
-    next_fomc_start_date_minus_2_day,
+    adj_prev_fomc_start_date + days(1),
+    adj_next_fomc_start_date + days(1),
     "day"
   )
+
   for (date in days_between_fomc_meetings_seq) {
     
     date <- as.Date(date, origin = lubridate::origin)
@@ -127,14 +137,13 @@ for (next_fomc_start_date in remaining_fomc_start_dates) {
         w_t5 <- c(w_t5, get_next_dummy_value(fomc_cycle_day, fomc_w5))
         w_t6 <- c(w_t6, get_next_dummy_value(fomc_cycle_day, fomc_w6))
         # w_t7 <- c(w_t7, get_next_dummy_value(fomc_cycle_day, fomc_w7))
-        # w_tm1 <- c(w_tm1, get_next_dummy_value(fomc_cycle_day, fomc_wm1))
+        w_tm1 <- c(w_tm1, get_next_dummy_value(fomc_cycle_day, fomc_wm1))
 
 
 
       }
     }
   }
-  
   prev_fomc_start_date <- next_fomc_start_date
 }
 
@@ -149,14 +158,14 @@ df <- data.frame(
   w_t6 = w_t6,
   # w_t7 = w_t7,
   w_cluster = w_cluster,
-  # w_tm1 = w_tm1,
+  w_tm1 = w_tm1,
   fomc_d = fomc_d,
   w_even = w_even,
   w_t2t4t6 = w_t2t4t6
 )
 
 # Write csv containing FOMC dummies
-write.csv(df, 'fomc_week_dummies_2010_2016.csv', row.names = FALSE)
+write.csv(df, 'fomc_week_dummies_2014_2016.csv', row.names = FALSE)
 
 
 
@@ -177,6 +186,10 @@ write.csv(df, 'fomc_week_dummies_2010_2016.csv', row.names = FALSE)
 fomc_test_date <- as.Date("2014-01-28")
 
 # Expected return values:
+get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-21")) # NULL
+get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-22")) # NULL
+get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-23")) # NULL
+get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-24")) # NULL
 get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-25")) # NULL
 get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-26")) # NULL
 get_fomc_day_within_fomc_cycle(fomc_test_date, as.Date("2014-01-27")) # Mo: -1 -> fomc_w0

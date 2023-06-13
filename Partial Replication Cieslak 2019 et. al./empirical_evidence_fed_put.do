@@ -60,7 +60,8 @@ cap mkdir stata_fed_put // generate a sub-folder "stata"
 log using "stata_fed_put/stata_fed_put", replace
 
 // Load FOMC cycle dummies .csv
-import delimited "fomc_week_dummies_2010_2016.csv", clear
+//import delimited "fomc_week_dummies_2010_2016.csv", clear
+import delimited "fomc_week_dummies_2014_2016.csv", clear
 // Order master data by date
 sort date
 // save .dta
@@ -68,13 +69,13 @@ save d:fomc_data, replace
 
 
 // Load SP500 data .csv
-import delimited "sp500_df_2014_2016.csv", clear
+//import delimited "sp500_df_2014_2016.csv", clear
 // Order data by date
-sort date
+//sort date
 // save .dta
-save d:sp500_data, replace
+//save d:sp500_data, replace
 
-// Load SP500 data .csv
+// Load us_returns_df_2010_2016.csv
 import delimited "us_returns_df_2010_2016.csv", clear
 // Order data by date
 sort date
@@ -90,22 +91,13 @@ save d:fed_put_datamerged_data, replace
 gen date2 = date(date, "YMD")
 
 // For 2014 to 2016
-//drop if date2 <= 19723
 
+drop if date2 <= 19723
 
-lgraph mktrfavg5d fomc_d
+// Cieslak replication File excess returns
 
-
-
-
-
-
-// MLR
-
-drop if missing(w_t0)
-
-drop if missing(sp500)
-
+* Stock and bill return variables
+* -------------------------------
 
 //Expected Return = Risk-free rate + (Beta*Market risk premium)
 
@@ -119,14 +111,77 @@ drop if missing(sp500)
  //                      = Tr – Rf + β(Rm – Rf)
 
 
+ge m=(mktrf+rf)/100+1
+ge r=rf/100+1
+replace m=1 if m==. 
+replace r=1 if r==. 
+ge lnm=ln(m)
+ge lnr=ln(r)
+
+label variable m "1+stock return"
+label variable r "1+bill return"
+label variable lnm "ln(1+stock return)"
+label variable lnr "ln(1+bill return)"
+
+//so year month day
+ge ex1=100*(m-r)
+ge ex5=100*(m*m[_n+1]*m[_n+2]*m[_n+3]*m[_n+4]-r*r[_n+1]*r[_n+2]*r[_n+3]*r[_n+4] )
+label variable ex1 "1-day excess return, day t, pct"
+label variable ex5 "5-day excess return, day t to t+4 pct"
+
+ge t=_n
+label variable t "Observation number"
 
 
-reg mktrf w_t0 w_t2t4t6
+// ------
 
-reg mktrfavg5d w_t0
 
-reg mktrfavg5d w_t2t4t6
 
+
+
+
+drop if t > 783
+
+// drop if missing(mktrf)
+
+
+// 777 observations vs. 783 (6 diff) because of "drop for missing dummies" (-6 obs.)
+
+lgraph ex5 fomc_d
+
+
+
+// MLR
+
+
+
+
+
+reg ex1 w_t0 w_t2t4t6
+
+
+// edit if !e(sample)
+replace fomc_d = 29 in 440
+replace w_t0 = 0 in 440
+
+replace w_t2t4t6 = 1 in 440
+replace w_even = 1 in 440
+
+replace w_t1 = 0 in 440
+replace w_t2 = 0 in 440
+replace w_t3 = 0 in 440
+replace w_t4 = 0 in 440
+replace w_t5 = 0 in 440
+replace w_t6 = 1 in 440
+replace w_tm1 = 0 in 440
+
+reg ex1 w_t0 w_t2t4t6
+
+reg ex1 w_tm1 w_t1 w_t3 w_t5
+
+reg ex1 w_t0 w_t2 w_t4, robust
+
+reg ex1 w_t0 w_t2t4t6, robust
 
 
 cap log close
