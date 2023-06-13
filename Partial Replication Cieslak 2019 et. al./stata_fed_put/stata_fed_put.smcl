@@ -3,7 +3,7 @@
       name:  {res}<unnamed>
        {txt}log:  {res}/Users/felixreichel/Documents/UNI/WIWI_Bachelor/2023S/SE Bachelorarbeit/Git/Partial Replication Cieslak 2019 et. al./stata_fed_put/stata_fed_put.smcl
   {txt}log type:  {res}smcl
- {txt}opened on:  {res}13 Jun 2023, 17:08:06
+ {txt}opened on:  {res}13 Jun 2023, 17:25:56
 {txt}
 {com}. 
 . // Load FOMC cycle dummies .csv
@@ -123,32 +123,12 @@
 {com}. 
 . 
 . // ------
-. 
-. 
-. 
-. 
-. 
-. 
 . drop if t > 783
 {txt}(16 observations deleted)
 
 {com}. 
-. // drop if missing(mktrf)
-. 
-. 
-. // 777 observations vs. 783 (6 diff) because of "drop for missing dummies" (-6 obs.)
-. 
-. lgraph ex5 fomc_d
-{res}{txt}
-{com}. 
-. 
 . 
 . // MLR
-. 
-. 
-. 
-. 
-. 
 . reg ex1 w_t0 w_t2t4t6
 
 {txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       782
@@ -205,24 +185,7 @@
 {txt}(1 real change made)
 
 {com}. 
-. reg ex1 w_t0 w_t2t4t6
-
-{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       783
-{txt}{hline 13}{c +}{hline 34}   F(2, 780)       = {res}     4.19
-{txt}       Model {c |} {res} 5.99711699         2  2.99855849   {txt}Prob > F        ={res}    0.0154
-{txt}    Residual {c |} {res} 557.783789       780  .715107421   {txt}R-squared       ={res}    0.0106
-{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0081
-{txt}       Total {c |} {res} 563.780906       782   .72094745   {txt}Root MSE        =   {res} .84564
-
-{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 1}         ex1{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
-{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.174{col 26}{space 2}    0.088{col 37}{space 1}    1.99{col 46}{space 3}0.047{col 54}{space 4}    0.002{col 67}{space 3}    0.346
-{txt}{space 4}w_t2t4t6 {c |}{col 14}{res}{space 2}    0.176{col 26}{space 2}    0.068{col 37}{space 1}    2.59{col 46}{space 3}0.010{col 54}{space 4}    0.043{col 67}{space 3}    0.309
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}   -0.049{col 26}{space 2}    0.042{col 37}{space 1}   -1.17{col 46}{space 3}0.242{col 54}{space 4}   -0.130{col 67}{space 3}    0.033
-{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{res}{txt}
-{com}. 
+. 
 . reg ex1 w_tm1 w_t1 w_t3 w_t5
 
 {txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       783
@@ -243,25 +206,28 @@
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
-. reg ex1 w_t0 w_t2 w_t4, robust
+. reg ex1 w_t0 w_t2t4t6
 
-{txt}Linear regression                               Number of obs     = {res}       783
-                                                {txt}F(3, 779)         =  {res}     2.70
-                                                {txt}Prob > F          = {res}    0.0447
-                                                {txt}R-squared         = {res}    0.0101
-                                                {txt}Root MSE          =    {res} .84642
+{txt}      Source {c |}       SS           df       MS      Number of obs   ={res}       783
+{txt}{hline 13}{c +}{hline 34}   F(2, 780)       = {res}     4.19
+{txt}       Model {c |} {res} 5.99711699         2  2.99855849   {txt}Prob > F        ={res}    0.0154
+{txt}    Residual {c |} {res} 557.783789       780  .715107421   {txt}R-squared       ={res}    0.0106
+{txt}{hline 13}{c +}{hline 34}   Adj R-squared   ={res}    0.0081
+{txt}       Total {c |} {res} 563.780906       782   .72094745   {txt}Root MSE        =   {res} .84564
 
 {txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{col 14}{c |}{col 26}    Robust
 {col 1}         ex1{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
 {hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
-{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.169{col 26}{space 2}    0.091{col 37}{space 1}    1.86{col 46}{space 3}0.063{col 54}{space 4}   -0.009{col 67}{space 3}    0.348
-{txt}{space 8}w_t2 {c |}{col 14}{res}{space 2}    0.141{col 26}{space 2}    0.080{col 37}{space 1}    1.76{col 46}{space 3}0.079{col 54}{space 4}   -0.016{col 67}{space 3}    0.299
-{txt}{space 8}w_t4 {c |}{col 14}{res}{space 2}    0.195{col 26}{space 2}    0.083{col 37}{space 1}    2.35{col 46}{space 3}0.019{col 54}{space 4}    0.032{col 67}{space 3}    0.358
-{txt}{space 7}_cons {c |}{col 14}{res}{space 2}   -0.044{col 26}{space 2}    0.043{col 37}{space 1}   -1.02{col 46}{space 3}0.307{col 54}{space 4}   -0.128{col 67}{space 3}    0.040
+{space 8}w_t0 {c |}{col 14}{res}{space 2}    0.174{col 26}{space 2}    0.088{col 37}{space 1}    1.99{col 46}{space 3}0.047{col 54}{space 4}    0.002{col 67}{space 3}    0.346
+{txt}{space 4}w_t2t4t6 {c |}{col 14}{res}{space 2}    0.176{col 26}{space 2}    0.068{col 37}{space 1}    2.59{col 46}{space 3}0.010{col 54}{space 4}    0.043{col 67}{space 3}    0.309
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}   -0.049{col 26}{space 2}    0.042{col 37}{space 1}   -1.17{col 46}{space 3}0.242{col 54}{space 4}   -0.130{col 67}{space 3}    0.033
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
 {res}{txt}
 {com}. 
+. 
+. 
+. * Replicate of
+. * "TABLE 1 PANEL B Column 1" (2014-2016)
 . reg ex1 w_t0 w_t2t4t6, robust
 
 {txt}Linear regression                               Number of obs     = {res}       783
@@ -278,6 +244,58 @@
 {txt}{space 4}w_t2t4t6 {c |}{col 14}{res}{space 2}    0.176{col 26}{space 2}    0.066{col 37}{space 1}    2.67{col 46}{space 3}0.008{col 54}{space 4}    0.047{col 67}{space 3}    0.305
 {txt}{space 7}_cons {c |}{col 14}{res}{space 2}   -0.049{col 26}{space 2}    0.043{col 37}{space 1}   -1.14{col 46}{space 3}0.254{col 54}{space 4}   -0.132{col 67}{space 3}    0.035
 {txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}
+{com}. 
+. 
+. set scheme FOMC // set scheme for graphs
+{txt}
+{com}. 
+. egen avgex5 = mean(ex5), by(fomc_d)
+{txt}
+{com}. label variable avgex5 "Avg. 5-day stock minus T-bill return, t to t+4 (pct)"
+{txt}
+{com}. 
+. 
+. 
+. 
+. * Adaptation for (2014-2016) of
+. * "FIGURE 1"
+. * --------
+. 
+. lgraph ex5 fomc_d
+{p 0 4 2}
+{txt}(note:  named style
+33 not found in class
+color,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+33 not found in class
+color,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+33 not found in class
+color,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+33 not found in class
+color,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+33 not found in class
+color,  default attributes used)
+{p_end}
+{res}{txt}
+{com}. 
+. 
+. 
+. 
+. so fomc_d
+{txt}
+{com}. scatter avgex5 fomc_d if fomc_d<=33, c(l l l) mlabel(fomc_d) yla(-0.2(0.2).6) graphregion(color(white)) lstyle(ci) name(fig1,replace)
 {res}{txt}
 {com}. 
 {txt}end of do-file
