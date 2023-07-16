@@ -134,29 +134,10 @@ label variable t "Observation number"
 
 
 // ------
-
-
-
-
-
-
 drop if t > 783
-
-// drop if missing(mktrf)
-
-
-// 777 observations vs. 783 (6 diff) because of "drop for missing dummies" (-6 obs.)
-
-lgraph ex5 fomc_d
-
 
 
 // MLR
-
-
-
-
-
 reg ex1 w_t0 w_t2t4t6
 
 
@@ -175,14 +156,38 @@ replace w_t5 = 0 in 440
 replace w_t6 = 1 in 440
 replace w_tm1 = 0 in 440
 
-reg ex1 w_t0 w_t2t4t6
 
 reg ex1 w_tm1 w_t1 w_t3 w_t5
 
-reg ex1 w_t0 w_t2 w_t4, robust
+reg ex1 w_t0 w_t2t4t6
 
+
+
+* Replicate of
+* "TABLE 1 PANEL B Column 1" (2014-2016)
 reg ex1 w_t0 w_t2t4t6, robust
 
 
-cap log close
-clear
+set scheme FOMC // set scheme for graphs
+
+egen avgex5 = mean(ex5), by(fomc_d)
+label variable avgex5 "Avg. 5-day stock minus T-bill return, t to t+4 (pct)"
+
+
+
+
+* Adaptation for (2014-2016) of
+* "FIGURE 1"
+* --------
+
+lgraph ex5 fomc_d
+
+so fomc_d
+scatter avgex5 fomc_d if fomc_d<=33, c(l l l) mlabel(fomc_d) yla(-0.2(0.2).6) graphregion(color(white)) name(fig1,replace)
+graph export fig1.pdf, replace
+
+so fomc_d
+scatter avgex5 fomc_d if fomc_d<=28, c(l l l) mlabel(fomc_d) yla(-0.2(0.2).6) graphregion(color(white))  name(fig1,replace)
+graph export fig2.pdf, replace
+
+
