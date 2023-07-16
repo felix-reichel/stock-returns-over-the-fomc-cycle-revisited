@@ -29,8 +29,6 @@ Kenneth R. French - Data Library. U.S. Research Returns Data. Fama/French 3 Fact
 
 Fama/French Current Research Returns: https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html
 
-How Does the Fama French 3 Factor Model Work?: https://smartasset.com/investing/7-situations-when-you-need-a-financial-advisor-most
-
 CAC-40 Index (missing datapoints weekends & holidays), 14th march 2023 - 20 yrs: https://www.macrotrends.net/2596/cac-40-index-france-historical-chart-data
 
 
