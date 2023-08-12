@@ -1,7 +1,9 @@
 .RData
 .Rhistory
 
-latex/MAIN.log
+*.log
+*.smcl
+
 latex/MAIN.aux
 latex/MAIN.bcf
 latex/MAIN.lof
@@ -16,15 +18,8 @@ latex/MAIN.bbl
 latex/MAIN.fdb_latexmk
 latex/MAIN.fls
 
-latex/cover/coversheet.aux
-latex/mainmatter.log
-latex/pdfa.xmpi
-
-stata_fed_put/stata_fed_put.smcl
-Partial Replication Cieslak 2019 et. al./run_FOMC_13 Jun 2023.log
-Partial Replication Cieslak 2019 et. al./stata_fed_put/stata_fed_put.smcl
-Partial Replication Cieslak 2019 et. al./stata_fed_put/stata_fed_put.smcl
-Partial Replication Cieslak 2019 et. al./hs_err_pid1402.log
-Partial Replication Cieslak 2019 et. al./stata_fed_put/stata_fed_put.smcl
 latex/frontmatter.bbl
 latex/frontmatter.blg
+
+latex/cover/coversheet.aux
+latex/pdfa.xmpi
