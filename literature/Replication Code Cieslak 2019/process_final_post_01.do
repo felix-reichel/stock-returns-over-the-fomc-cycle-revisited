@@ -338,7 +338,8 @@ eststo clear
 eststo: qui reg ex1 block0 block246 if cycle<=33 & year>=2014 & year<=2016, robust
 eststo: qui reg ex1 block0 block246 if cycle<=33 & year>=1994 & year<=2013, robust
 eststo: qui reg ex1 block0 block246 if cycle<=33 & year<1994, robust
-esttab, stats(N) b(a3) starlevels(*  0.10 ** 0.05 *** 0.010) label nogaps nonote
+esttab using "New.tex", stats(N) b(a3) starlevels(*  0.10 ** 0.05 *** 0.010) label nogaps nonote
+
 
 * PANEL C
 
