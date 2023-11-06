@@ -8,16 +8,67 @@ The starting point of this thesis is recently conducted research which studies t
 
 The paper "Stock Returns over the FOMC Cycle" \parencite{cieslak_stock_2019} finds that "the equity premium is entirely earned in even weeks starting from the last FOMC meeting (0,  2,  4 and 6)" which implies that the FED has "overly affected the stock market via unexpectatly accommodating policy". 
 
-Another paper "The Economics of the FED Put"  \parencite{cieslak_economics_2020} uses textual analysis of FOMC scripts to identify and measure the causal effect that policy makers indeed pay intention to the "stock market" and negative stock returns are linked with downgrades in growth projections (in an ex-post sense) since the mid-1990s.  
+Another paper "The Economics of the FED Put"  \parencite{cieslak_economics_2021} uses textual analysis of FOMC scripts to identify and measure the causal effect that policy makers indeed pay intention to the "stock market" and negative stock returns are linked with downgrades in growth projections (in an ex-post sense) since the mid-1990s.  
 Although policy makers seem to be aware of that the so-called "FED put" "could induce risk-taking" the paper concludes that it does not "significantly affect their decision-making in an ex-ante sense".
 
-TODO: Add thesis goal/Purpose statement..
+In my thesis I aim to find out whether the "FED Put" remains relevant in the Eurozone from 2016 onwards till 2023 (complicated by the COVID-19 crisis) and whether a similar dynamic can be observed within the European Central Bank's policy, particularly concerning interest rates and Exchange-Traded Funds (ETFs) containing European stocks. 
+
 
 
 \chapter{What is the "Fed Put" and how can it be explained?}
 
 
-TODO: Rewrite 
+\section{The FED Put}
+The "Fed put" in general refers to a strong accommodating monetary policy by Federal Reserve (FED). In case of sharp decline in asset prices the FED is expected by the market (its investors) to intervene. \parencite{FED_Put_dynamic_explained }
+This term is referring to the concept of a "put option" in asset markets which gives the holder the right to sell at a predetermined price.
+Therefore, the Fed put would protect an investor from the decline in the value of an asset. 
+The related term "Greenspan Put" is often used to describe the monetary policy of the Federal Reserve under the leadership of former Chairman Alan Greenspan, to intervene in financial markets in order to prevent significant declines or disruptions. 
+Some argue that market interventions are necessary to prevent financial crises (like the Dot-com-bubble burst in 2001 or Lehmann Brothers in 2008), while others believe that these interventions distort the market and create moral hazards.  \parencite{cieslak_economics_2020}
+The role as the lender of last resort function of the FED has initially been established to provide liquidity to the financial system during times of stress or crisis.  \parencite{ The role as the lender of last resort function }
+This role means that the FED stands ready to lend money to financial institutions to prevent systemic collapse. 
+However, a monetary dynamic like the "Fed put" goes beyond the lender of last resort function, as it suggests that it will also intervene in the markets to prevent a steep decline in asset prices.
+Therefore, some believe that the Fed put has created a moral hazard in the markets.  \parencite{FED moral hazard} 
+This means that investors are willing to take on excessive risks because they believe that the Federal Reserve will always come to rescue them. Some investors believe that such believes can lead to financial crises in the long run. 
+
+\section{Stock Returns over the FOMC Cycle}
+
+Diving further into causes for dynamics like the Fed put, recent papers like “Stock returns over the Federal Open Market Committee (FOMC) cycle” focused on a FOMC cycle specific pattern of the equity premium since 1994. 
+The calculated stock excess returns use Research Portfolio Data provided by Fama/French\parencite{Fama/French Factors} for convenience, which represent the return earned by holding stocks over other risk-free assets (like bonds)
+The stock returns exhibit a distinct patterns within the FOMC cycle. Notably, it primarily accrues in weeks 0, 2, 4, and 6 within the FOMC cycle weeks (we will explain the definition of FOMC cycle weeks in Chapter 3 respectively \ref{add REF}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/cies19/fig1}
+    \caption{cies19 - Fig1}
+\end{figure}
+
+
+The authors present three distinct trading strategies (A, B, and C) that shed light on the influence of the FOMC cycle on stock market returns. Of particular note is Strategy A, which involves exclusively holding stocks during even FOMC cycle weeks, a strategy conveniently implementable through Exchange-Traded Funds (ETFs). This strategy demonstrates that the average annual returns more than double compared to holding an ETF throughout the entire FOMC cycle. Intriguingly, the authors find that holding an ETF during uneven FOMC weeks results in financial losses over the examined period from 1994 to 2016.
+The authors extend their analysis to explore whether the FOMC cycle return pattern extends beyond the United States, potentially influenced by movements of the dollar currency. To investigate this, they use ETFs containing globally diversified stocks. To establish causality, the authors compare FOMC cycles with other macroeconomic news calendars (e.g. Bloomberg macroeconomic news), dispelling the notion that macroeconomic news significantly correlates with FOMC cycle calendars. They also provide evidence that the release of quarterly firm profits does not substantially account for the observed equity premium patterns over the FOMC cycle.
+To establish a causal link between the FEDs policy measures and stock market behavior, the authors study intermeeting target changes, Fed funds futures, and internal Board of Governors meetings. 
+The authors suggest significant influence by the FED over the stock market through its accommodating policies, leading to reductions in the equity premium. Moreover, they argue to uncover evidence of systematic informal communication channels between Fed officials and the media and financial sector, serving as a channel through which news about monetary policy has reached the market.
+
+\section{The Economics of the FED Put}
+
+The follow-up paper The economics of FED put” by \parencite{cieslak_economics_2021}“ further tries to study the economics of the relationship between FED policy and the stock market. 
+The authors compare the stock market as predictive power to other economic indicators to predict changes of the Federal Funds Rate (FFR) by using textual analysis from former Federal Open Market Committee (FOMC) meeting transcripts.
+Their findings affirm the FED indeed pays a lot of attention to the stock market during market downturns.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/cies21/Figure6}
+    \caption{cies21 - Fig6}
+\end{figure}
+
+
+They argue that the fed put is fueled by the Federal Reserve's concerns about the consumption wealth effect. Conversely, a strong stock market performance corresponds to updates of the FED’s internal growth projections.
+Empirical evidence substantiates their claims, as multiple regressions on changes in the Federal Funds Rate (FFR) demonstrate that the stock market captures a higher proportion of the variance (R-squared) compared to other macroeconomic indicators. Significantly, this relationship appears to be less pronounced before the 1990s period.
+During the third European Central Bank (ECB) research conference, valuable comments on the econometric approach used by the authors were made by the discussant.
+
+ Emmanuel Moench, the former head of research at Deutsche Bank. Moench's suggests that the correlation between negative stock excess returns and the Federal Funds Rate is heavily influenced by two specific FOMC meetings (during financial crises like the dot-com bubble burst in 2001 and the 2008 financial crisis).
+Furthermore, he recommended incorporating additional covariates, including consumer confidence news and credit spreads, into the regression models to enhance their explanatory power. Moench sees the stock market as one of several co-factors influencing Federal Reserve policy (presumably over the updates of the FEDs growth projections as stated by the authors), rather than a dominant driver of the FEDs policy.
+
+
 
 
 \chapter{Does the stylized fact of stock excess returns are mainly achieved in FOMC even weeks (0,  2,  4,  6) from 2016 onwards still persist?}
@@ -110,14 +161,8 @@ Also regress on "ECB policy meetings calendar week".
 * Any implications???
 
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.9\textwidth]{figures/cac-40}
-    \caption{CAC-40 Index from 3rd january 1995 to 27th march 2023}
-\end{figure}
-
 \chapter{Conclusion}
 
-Conclusio
+Conclusio / Implications / Further Notions
 
 
