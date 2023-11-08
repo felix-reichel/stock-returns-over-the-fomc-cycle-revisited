@@ -34,11 +34,11 @@ This means that investors are willing to take on excessive risks because they be
 
 Diving further into causes for dynamics like the Fed put, recent papers like “Stock returns over the Federal Open Market Committee (FOMC) cycle” focused on a FOMC cycle specific pattern of the equity premium since 1994. 
 The calculated stock excess returns use Research Portfolio Data provided by Fama/French\parencite{Fama/French Factors} for convenience, which represent the return earned by holding stocks over other risk-free assets (like bonds)
-The stock returns exhibit a distinct patterns within the FOMC cycle. Notably, it primarily accrues in weeks 0, 2, 4, and 6 within the FOMC cycle weeks (we will explain the definition of FOMC cycle weeks in Chapter 3 respectively \ref{add REF}.
+The stock returns exhibit a distinct patterns within the FOMC cycle. Notably, it primarily accrues in weeks 0, 2, 4, and 6 within the FOMC cycle weeks (For explaination of the FOMC cycle see figure~\ref{cies19_fig2} on page~\pageref{cies19_fig2}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/cies19/fig1}
+    \includegraphics[width=0.85\textwidth]{figures/cies19/fig1}
     \caption{cies19 - Fig1}
 \end{figure}
 
@@ -56,7 +56,7 @@ Their findings affirm the FED indeed pays a lot of attention to the stock market
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\textwidth]{figures/cies21/Figure6}
+    \includegraphics[width=0.85\textwidth]{figures/cies21/Figure6}
     \caption{cies21 - Fig6}
 \end{figure}
 
@@ -71,31 +71,40 @@ Furthermore, he recommended incorporating additional covariates, including consu
 
 
 
-\chapter{Stock returns over the FOMC Cycle Revisited / Does the stylized fact of stock excess returns are mainly achieved in FOMC even weeks (0,  2,  4,  6) from 2016 onwards still persist?}
+\chapter{Stock returns over the FOMC Cycle Revisited }
 
 
 \section{The FOMC cycle}
 
+The FOMC (federal market open committee) meets approximately every eight weeks during the year, which results in a FOMC cycle time of approximately 7 weeks (excluding weekends) at most times since a year has 52 weeks.
+The authors therefore define FOMC cycle time week dummy variables for week 0 as days -1 one to 3, week 1 as days 4 to 8,  till week 6 as days 29 to 33. Worthwhile to mention is that the authors drop 3 days which would be in FOMC cycle week 7 from their investigation and that the number of available data points for decreases for FOMC dummies (meaning 920 days in week 0, 924 days in week 2, 831 days in week 4, 120 days in week 6 for the relevant timespan from 1994 till 2016)
+
+\label{cies19_fig2}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/cies19/fig2}
+    \caption{cies19 - Fig2}
+\end{figure}
+
+
 \section{FOMC data}
+
+\newpage
 
 \section{Calculation of stock excess returns using Fama/French factors}
 
+\newpage
+
 \section{Linear Regression with FOMC dummy variables}
 
-\section{Replication with FOMC data from 2016 onwards (complicated due to COVID-19)}
-
-
-
-Empirical part I
-
-TODO: Explain how the FOMC cycle time is defined.
-
-TODO: Explain the one of the main regression models used in the paper "Stock Returns over the FOMC Cycle" \parencite{cieslak_stock_2019}
-
+One relevant linear regression model with FOMC cycle week as in \parencite{cieslak_stock_2019} can be defined as:
 \begin{equation}
-	rx_{i}=\hat{\beta_{0}}+D_0*\hat{\gamma_{1}}+D_1*\hat{\gamma_{2}}+\epsilon_i
+	rxpct_{i}=\hat{\beta_{0}}+D_0*\hat{\gamma_{1}}+D_1*\hat{\gamma_{2}}+\epsilon_i
 \end{equation}
 where
+$ {\beta_{0}} $ is the OLS-estimated intercept,
+$ {\gamma_{1}, \gamma_{2}} $ the OLS-estimated parameters,
+${ rx_{i}} $ the excess returns as calculated like in chapter 3.3., 
 \begin{equation}
     D_0=
     \begin{cases}
@@ -103,7 +112,7 @@ where
       0, & \text{otherwise}
     \end{cases}
 \end{equation}
-and
+the FOMC cycle dummy for week 0, 
 \begin{equation}
     D_1=
     \begin{cases}
@@ -111,16 +120,19 @@ and
       0, & \text{otherwise}
     \end{cases}
 \end{equation}
+the FOMC cycle dummy for week 2,4, 6 and
+$ {
+	\epsilon_i \sim \; \; i.i.d. \; \; \mathcal{N}\left(0, \sigma^2 \right)
+} $
+are independent identically distributed OLS-estimated standard errors. 
 
 
-Interpret regression results in  \parencite{cieslak_stock_2019}
+\newpage
 
-Line340 replication code add:
-"esttab using "Out.tex", stats(N) b(a3) starlevels(*  0.10 ** 0.05 *** 0.010) label nogaps nonote"
 
+% Line340 replication code add: esttab using "Out.tex"
+% Replication table 1
 {
-
-
 \ref{table_cies19_1}
 \begin{table}
 \begin{center}
@@ -146,39 +158,65 @@ N                   &         783   &        5214   &        2937   \\
 \end{tabular}
 %%%
 \end{adjustbox}
-\caption{\label{table_cies19_1}TODO: add a caption here.}
+\caption{\label{table_cies19_1} Regression results as in Figure <Insert here> \parencite{cieslak_stock_2019}}
 \end{center}
 \end{table}
-
 }
 
 
+\newpage
 
+
+
+\section{Replication with FOMC data from 2016 onwards (complicated due to COVID-19)}
 
 TODO: Use the regression model to estimate variable for a newer timeframe from 2016 onwards.
 
-\chapter{Implications for European stock markets / Is there empirical evidence for a similar effect when considering only the euro-zone and euro-zone stock returns.  Does it imply an equivalent of the Fed Put in the Euro-Zone?}
+Empirical part I
+
+Answer Q.: Does the stylized fact of stock excess returns are mainly achieved in FOMC even weeks (0,  2,  4,  6) from 2016 onwards still persist?
+
+\newpage
+
+
+\chapter{Implications For The Euro-Zone And European Stock Markets}
+%Is there empirical evidence for a similar effect when considering only the euro-zone and euro-zone stock returns.  Does it imply an equivalent of the Fed Put in the Euro-Zone?
+
+\newpage
 
 \section{Relevance of the FOMC cycle pattern using European ETFs}
 
-\section{ECB policy meetings}
-
-\section{ECB interest rates}
-
-\section{Euro-zone Implications}
-
 Empirical part II
 
-Substitute for euro-zone stock excess returns as regressor variable.
+Substitute for euro-zone only stock excess returns as regressor variable.
 
-Also regress on "ECB policy meetings calendar week". 
 
-* Can anything be learned/infered from the new regressions? -> Probably not really.
-* Low R2, missing controls/covariates, missing domain specific knowledge, etc.
-* causal mechanism?
-* How much do 2 specific events excluded from the results change the regression results?
-* Any implications???
+Answer Q: Is there empirical evidence for a similar effect when considering only the euro-zone and euro-zone stock returns. 
 
+
+\newpage
+
+
+\section{ECB policy meetings and ECB key interest rates}
+
+\newpage
+
+\section{Euro-zone implications}
+
+Empirical part III
+
+Regress on ~"ECB policy meeting dates"
+
+Answer Q: Does it imply an equivalent of the Fed Put in the Euro-Zone?
+
+
+-Can anything be learned from regressions on past excess returns?
+-R-squared,  missing controls/covariates (consumer confidence news, credit spreads ,etc.
+-causality?
+-How much do 2 specific events excluded from the results change the regression results/variation?
+
+
+\newpage
 
 \chapter{Conclusion}
 
