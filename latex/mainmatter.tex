@@ -102,9 +102,9 @@ One relevant linear regression model with FOMC cycle week as in \parencite{ciesl
 	rxpct_{i}=\hat{\beta_{0}}+D_0*\hat{\gamma_{1}}+D_1*\hat{\gamma_{2}}+\epsilon_i
 \end{equation}
 where
-$ {\beta_{0}} $ is the OLS-estimated intercept,
-$ {\gamma_{1}, \gamma_{2}} $ the OLS-estimated parameters,
-${ rx_{i}} $ the excess returns as calculated like in chapter 3.3., 
+$ { \hat{\beta_{0}} } $ is the OLS-estimated intercept,
+$ { \hat{\gamma_{1}}, \hat{\gamma_{2}} } $ the OLS-estimated parameters,
+${ rx_{i} } $ the excess returns as calculated like in chapter 3.3., 
 \begin{equation}
     D_0=
     \begin{cases}
@@ -121,9 +121,7 @@ the FOMC cycle dummy for week 0,
     \end{cases}
 \end{equation}
 the FOMC cycle dummy for week 2,4, 6 and
-$ {
-	\epsilon_i \sim \; \; i.i.d. \; \; \mathcal{N}\left(0, \sigma^2 \right)
-} $
+$ { \epsilon_i \; \sim \; i.i.d.  \; \mathcal{N}\left(0, \sigma^2 \right) } $
 are independent identically distributed OLS-estimated standard errors. 
 
 

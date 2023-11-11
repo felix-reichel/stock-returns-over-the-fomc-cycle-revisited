@@ -1,3 +1,0 @@
-pdflatex Main.tex
-biber Main.tex
-pdflatex Main.tex

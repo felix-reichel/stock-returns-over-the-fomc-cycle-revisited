@@ -4,6 +4,9 @@
 *.log
 *.smcl
 
+stata_log
+d:*
+
 latex/MAIN.aux
 latex/MAIN.bcf
 latex/MAIN.lof
