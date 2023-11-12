@@ -1,4 +1,4 @@
-## Empirical Evidence of excess profits in european stock markets prior to ECB monetary policy decisions.
+## Stock Returns over the FOMC Cycle Revisited
 
 
 ### Useful Resources

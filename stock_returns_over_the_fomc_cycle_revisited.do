@@ -3,31 +3,29 @@ version 11
 set more off
 set cformat %5.3f
 capture log close
-set scheme s1mono
+set scheme FOMC
 
 cd "/Users/felixreichel/Documents/UNI/WIWI_Bachelor/2023S/SE Bachelorarbeit/ecb-monetary-policy-decisions-and-eurozone-stock-excess-returns"
 
 cap mkdir stata_log
 log using "stata_log/stata_log", replace
 
-// Function to reload data
+// Function to reload data and calculate stock excess returns
 program define reload_data
     import delimited "FOMC_dummy_generation/fomc_week_dummies_1994_nov2023.csv", clear
     sort date
     save d:fomc_data, replace
 
-    import delimited "US_Returns_Fama_French_Factors_daily/us_returns_df_1994_nov2023.csv", clear
+    import delimited "US_Returns_Fama_French_Factors_daily/us_returns_df_1994_oct2023.csv", clear
     sort date
     save d:us_returns_data, replace
 
     merge date using d:fomc_data d:us_returns_data
     save d:fed_put_datamerged_data, replace
     gen date2 = date(date, "YMD")
-end
-
-// Function to calculate stock excess returns
-program define calculate_excess_returns
-    ge m = (mktrf + rf) / 100 + 1
+	
+	// calculate stock excess returns
+	ge m = (mktrf + rf) / 100 + 1
     ge r = rf / 100 + 1
     replace m = 1 if m ==. 
     replace r = 1 if r ==. 
@@ -48,13 +46,9 @@ program define calculate_excess_returns
     label variable t "Observation number"
 end
 
-// Function to run regression models
-program define run_regression_models
-    // MLR
-    reg ex1 w_t0 w_t2t4t6
-    reg ex1 w_tm1 w_t1 w_t3 w_t5
-    reg ex1 w_t0 w_t2t4t6
-end
+// Reload data definitions and processing
+reload_data
+
 
 // Function to generate graphs
 program define generate_graphs
@@ -69,13 +63,10 @@ program define generate_graphs
     graph export fig1.pdf, replace
 end
 
-// Reload data definitions and processing
-reload_data
-calculate_excess_returns
-
 // Regression Model 1
 program define regression_model_1
     reg ex1 w_t0 w_t2t4t6 if t >= 5307 & t <= 6089, robust
+	
 	// TODO: Fix Current Bug with the FOMC dummies in the sample
 	//edit if !e(sample)
 	replace fomc_d = 29 in 5746
@@ -108,12 +99,10 @@ program define regression_model_3
 end
 
 // Own 
-
 // Pre COVID-19 sample from 2016 to 2019
 program define regression_model_pre_covid
     reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust
 end
-
 
 // Post COVID-19 sample from 2019 to 2022
 program define regression_model_post_covid
@@ -127,15 +116,36 @@ program define regression_model_full
 end
 
 
+program define fomc_cycle_returns
+
+	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 5307 & t <= 6089, robust
+	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t < 5307, robust
+    eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t <= 6089, robust
+	
+	esttab mlr1 mlr2 mlr3 using "Stock Returns over the FOMC cycle.tex", ///
+		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
+		mlabels("2014-2016 sample" "1994-2014 sample" "1994-2016 sample") ///
+		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
+end
+
+program define fomc_cycle_returns_revisited
+	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust // pre covid sample
+	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust // post covid sample
+	eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust // full revisited sample
+	eststo mlr4: reg ex1 w_t0 w_t2t4t6, robust // full 
+
+	esttab mlr1 mlr2 mlr3 mlr4 using "Stock Returns over the FOMC cycle Revisited.tex", ///
+		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
+		mlabels("2016-2019" "2019-2022" "2016-2023" "1994-2023") ///
+		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
+end
+
+
 
 // Execute Regression Models and Graphs
-run_regression_models
 
-regression_model_1
-regression_model_2
-regression_model_3
-regression_model_pre_covid
-regression_model_post_covid
-regression_model_full
+regression_model_1	// Run 2x
+fomc_cycle_returns
+fomc_cycle_returns_revisited
 
 //generate_graphs
