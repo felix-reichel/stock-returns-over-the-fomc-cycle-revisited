@@ -16,7 +16,7 @@ program define reload_data
     sort date
     save d:fomc_data, replace
 
-    import delimited "US_Returns_Fama_French_Factors_daily/us_returns_df_1994_oct2023.csv", clear
+    import delimited "F-F_Factors_daily_US/us_returns_df_1994_oct2023.csv", clear
     sort date
     save d:us_returns_data, replace
 
@@ -122,7 +122,7 @@ program define fomc_cycle_returns
 	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t < 5307, robust
     eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t <= 6089, robust
 	
-	esttab mlr1 mlr2 mlr3 using "Stock Returns over the FOMC cycle.tex", ///
+	esttab mlr1 mlr2 mlr3 using "stata_out/Stock Returns over the FOMC cycle.tex", ///
 		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
 		mlabels("2014-2016 sample" "1994-2014 sample" "1994-2016 sample") ///
 		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
@@ -134,7 +134,7 @@ program define fomc_cycle_returns_revisited
 	eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust // full revisited sample
 	eststo mlr4: reg ex1 w_t0 w_t2t4t6, robust // full 
 
-	esttab mlr1 mlr2 mlr3 mlr4 using "Stock Returns over the FOMC cycle Revisited.tex", ///
+	esttab mlr1 mlr2 mlr3 mlr4 using "stata_out/Stock Returns over the FOMC cycle Revisited.tex", ///
 		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
 		mlabels("2016-2019" "2019-2022" "2016-2023" "1994-2023") ///
 		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
