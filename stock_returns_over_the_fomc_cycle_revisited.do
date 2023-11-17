@@ -46,10 +46,6 @@ program define reload_data
     label variable t "Observation number"
 end
 
-// Reload data definitions and processing
-reload_data
-
-
 // Function to generate graphs
 program define generate_graphs
     set scheme FOMC // set scheme for graphs
@@ -62,6 +58,31 @@ program define generate_graphs
     scatter avgex5 fomc_d if fomc_d <= 33, c(l l l) mlabel(fomc_d) yla(-0.2(0.2).6) graphregion(color(white)) name(fig1, replace)
     graph export fig1.pdf, replace
 end
+
+
+program define fomc_cycle_returns
+	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 5307 & t <= 6089, robust
+	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t < 5307, robust
+	eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t <= 6089, robust
+	
+	esttab mlr1 mlr2 mlr3 using "stata_out/Stock Returns over the FOMC cycle.tex", ///
+		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
+		mlabels("2014-2016" "1994-2014" "1994-2016") ///
+		postfoot("significant at 1\%-level (***), 5\% level (**), 10\% level (*)")
+end
+
+program define fomc_cycle_returns_revisited
+	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust // pre covid sample
+	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust // post covid sample
+	eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust // full revisited sample
+	eststo mlr4: reg ex1 w_t0 w_t2t4t6, robust // full 
+
+	esttab mlr1 mlr2 mlr3 mlr4 using "stata_out/Stock Returns over the FOMC cycle Revisited.tex", ///
+		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
+		mlabels("2016-2019" "2019-2022" "2016-2023" "1994-2023") ///
+		postfoot("significant at 1\%-level (***), 5\% level (**), 10\% level (*)")
+end
+
 
 // Regression Model 1
 program define regression_model_1
@@ -109,43 +130,20 @@ program define regression_model_post_covid
     reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust
 end
 
-
 // Control: Full extension sample from 2016 to Nov 2023
 program define regression_model_full
     reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust
 end
 
 
-program define fomc_cycle_returns
+// Reload data definitions and processing
+reload_data
 
-	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 5307 & t <= 6089, robust
-	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t < 5307, robust
-    eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t <= 6089, robust
-	
-	esttab mlr1 mlr2 mlr3 using "stata_out/Stock Returns over the FOMC cycle.tex", ///
-		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
-		mlabels("2014-2016 sample" "1994-2014 sample" "1994-2016 sample") ///
-		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
-end
+regression_model_1
+regression_model_1
 
-program define fomc_cycle_returns_revisited
-	eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust // pre covid sample
-	eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust // post covid sample
-	eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust // full revisited sample
-	eststo mlr4: reg ex1 w_t0 w_t2t4t6, robust // full 
-
-	esttab mlr1 mlr2 mlr3 mlr4 using "stata_out/Stock Returns over the FOMC cycle Revisited.tex", ///
-		r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
-		mlabels("2016-2019" "2019-2022" "2016-2023" "1994-2023") ///
-		postfoot("significant at 1%-level (***), 5% level (**), 10% level (*)")
-end
-
-
-
-// Execute Regression Models and Graphs
-
-regression_model_1	// Run 2x
 fomc_cycle_returns
 fomc_cycle_returns_revisited
 
 //generate_graphs
+
