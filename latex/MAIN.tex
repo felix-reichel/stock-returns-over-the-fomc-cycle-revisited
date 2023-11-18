@@ -92,6 +92,39 @@
 % Adds package adjustbox
 \usepackage{adjustbox}
 
+\usepackage{listings}
+\usepackage{inconsolata}
+
+\definecolor{codebackground}{RGB}{250,250,250}
+\definecolor{commentgreen}{RGB}{0,128,0}
+\definecolor{keyword}{RGB}{0,0,120}
+\definecolor{numbergray}{RGB}{128,128,128}
+
+\lstset{
+  language=R,
+  basicstyle=\small\ttfamily,
+  commentstyle=\color{commentgreen},
+  keywordstyle=\color{keyword},
+  numberstyle=\tiny\color{numbergray},
+  numbers=left,
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{codebackground},
+  frame=single,
+  framerule=0pt,
+  rulecolor=\color{codebackground},
+  aboveskip=1em,
+  belowskip=1em,
+  breaklines=true,
+  breakatwhitespace=true,
+  captionpos=b,
+  tabsize=2,
+  showspaces=false,
+  showstringspaces=false,
+  emph={TRUE,FALSE,T,NULL},
+  emphstyle=\color{keyword},
+}
+
 % \setcounter{tocdepth}{3} %subsubsection
 % \setcounter{secnumdepth}{3}
 
@@ -151,10 +184,11 @@
 
 \input{frontmatter}
 
+
 \begin{singlespace}
-	\tableofcontents
-	\listoffigures 
-	\listoftables
+  \tableofcontents
+    \listoffigures
+    \listoftables
 \end{singlespace}
 
 
