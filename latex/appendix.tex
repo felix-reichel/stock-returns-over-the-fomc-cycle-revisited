@@ -1,20 +1,20 @@
 \chapter{Appendix}
 
-\section{R Code: FOMC Cycle Dummy Generation}
+\section{R Code: Dummy Generation}
 \label{app:fomc_code}
 
 The R code in this section, provided in Listing~\ref{lst:fomc_code}, generates FOMC week dummy variables based on the defined FOMC cycle patterns. The resulting data frame is then saved to a CSV file.
 
 \lstinputlisting[caption={R code for FOMC Week Dummy Generation}, label={lst:fomc_code}]{../FOMC_dummy_generation/generate_fomc_cycle_dummies.R}
 
-\subsection{CSV File of generated FOMC dummies}
+\subsection{CSV File: Example structure of generated dummies}
 \label{app:first_35_lines_csv}
 
 The listing~\ref{lst:first_35_lines_csv} displays the first 35 examples of the generated FOMC dummies in the CSV file,  containing approximately one FOMC cycle consisting of 7 work-weeks:
 
 \lstinputlisting[firstline=2, lastline=36, caption={First 35 examples of the generated FOMC dummies}, label={lst:first_35_lines_csv}, prebreak=\mbox{$\hookrightarrow$}]{../FOMC_dummy_generation/fomc_week_dummies_1994_nov2023.csv}
 
-\section{R Code: FOMC Cycle Dummy Generation Tests}
+\section{R Code: Tests}
 \label{app:fomc_code}
 
 The provided test, implemented with the \texttt{testthat} package in R, is designed to assess the accuracy of the \texttt{get\_fomc\_day\_within\_fomc\_cycle} function. In this test scenario, a reference FOMC meeting date, set to "2014-01-28" (\texttt{fomc\_test\_date}), serves as the basis for evaluating the function's output for various input dates. The expectations are explicitly defined for different scenarios, encompassing dates preceding, matching, and succeeding the FOMC meeting date. The function is expected to return negative values for dates before the meeting, indicating the number of days prior, 0 for the meeting date itself, and positive values for dates afterward, denoting the days post-meeting. Importantly, the test accounts for weekends, with the function expected to return \texttt{NULL} for input dates falling on Saturdays or Sundays. By assessing the function's behavior across this range of conditions, the test aims to ensure the accurate functioning of \texttt{get\_fomc\_day\_within\_fomc\_cycle} in relation to FOMC meeting dates and weekends, contributing to the overall verification of its correctness and robustness.
@@ -64,10 +64,42 @@ write.csv(
 \end{singlespace}
 
 
-\section{STATA Code: Measurement and Estimation Analysis}
+\section{STATA Code: Measurement and Estimation Analysis (MEA)}
 \label{app:stata_code}
 
-The STATA code in this section, provided in Listing~\ref{lst:stata_code}, involves the use of \texttt{estab} commands to measure and estimate stock returns over the FOMC cycle. It includes functions to reload data, calculate stock excess returns, and generate graphs for analysis.
+This STATA code provided in Listing~\ref{lst:stata_code} conducts an analysis of stock returns in relation to FOMC meetings. The focus extends to both U.S. and European stock returns, with the code structured into sections:
+
+\textbf{Environment Setup:}
+\begin{itemize}
+    \item Clears existing data and configures preferences.
+    \item Initializes a log file for documentation.
+\end{itemize}
+
+\textbf{Data Import and Preprocessing:}
+\begin{itemize}
+    \item Imports FOMC meeting dates and U.S. stock return data.
+    \item Merges datasets based on the date variable.
+    \item Converts the date variable to a standardized format.
+\end{itemize}
+
+\textbf{Calculation of Excess Stock Returns:}
+\begin{itemize}
+    \item Computes excess stock returns using the methodology from Cieslak et al. (2019).
+\end{itemize}
+
+\textbf{Statistical Analysis (MEA):}
+\begin{itemize}
+    \item Performs regression analyses on excess stock returns for various time periods.
+    \item Utilizes the \texttt{eststo} command to store regression results.
+\end{itemize}
+
+\textbf{Output Generation:}
+\begin{itemize}
+    \item Outputs regression results in LaTeX format, generating tables for different analysis periods.
+    \item Replicates the entire analysis for European stock returns.
+\end{itemize}
+
+
 
 \lstinputlisting[caption={STATA code for Measurement and Estimation Analysis}, label={lst:stata_code}]{../stock_returns_over_the_fomc_cycle_revisited.do}
 
