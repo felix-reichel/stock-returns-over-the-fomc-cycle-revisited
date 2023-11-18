@@ -45,7 +45,7 @@ label variable ex5 "5-day excess return, day t to t+4 pct"
 ge t = _n
 label variable t "Observation number"
 
-
+// Measurement and Estimation Analysis (MEA)
 // Stock Returns over the FOMC Cycle Replication results
 // Replication of TABLE 1 PANEL A Column 1 (2013 to 2016) as in Cieslak et al. (2019)
 eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 5307 & t <= 6089, robust
@@ -56,17 +56,24 @@ eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t < 5307, robust
 // Replication of TABLE 1 PANEL A Column 1 (1994 to 2016) as in Cieslak et al. (2019)
 eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 16 & t <= 6089, robust
 
-
 esttab mlr1 mlr2 mlr3 using "stata_out/Stock Returns over the FOMC cycle.tex", ///
 	r2(%9.4g) ar2(%9.4g) stats(N) starlevel(* 0.1 ** 0.05 *** 0.01) noobs ///
 	mlabels("2014-2016" "1994-2014" "1994-2016") ///
 	postfoot("significant at 1\%-level (***), 5\% level (**), 10\% level (*)")
 
 	
-// Stock Returns over the FOMC Cycle Revisited - MEA	
-eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust // 2016-2019 sample
-eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust // 2019-2022 covid sample
-eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust // 2016-2023 revisited sample
+// Stock Returns over the FOMC Cycle Revisited
+
+// 2016-2019 sample
+eststo mlr1: reg ex1 w_t0 w_t2t4t6 if t >= 6089 & t < 6872, robust 
+
+// 2019-2022 covid sample
+eststo mlr2: reg ex1 w_t0 w_t2t4t6 if t >= 6872 & t < 7658, robust 
+
+// 2016-2023 revisited sample
+eststo mlr3: reg ex1 w_t0 w_t2t4t6 if t >= 6089, robust 
+
+// 1994-2023 full FOMC Cycle sample
 eststo mlr4: reg ex1 w_t0 w_t2t4t6, robust // 1994-2023
 
 esttab mlr1 mlr2 mlr3 mlr4 using "stata_out/Stock Returns over the FOMC cycle Revisited.tex", ///
