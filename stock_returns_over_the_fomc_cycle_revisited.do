@@ -1,9 +1,8 @@
-// U.S. Stock Returns over the FOMC Cycle - Measurement and Estimation Analysis (MEA)
+// U.S. Stock Returns over the FOMC Cycle - Statistical Analysis
 clear
 set more off
 set cformat %5.3f
 capture log close
-set scheme FOMC
 cd "<insert-working-directory-here>"
 cap mkdir stata_log
 log using "stata_log/stata_log", replace
@@ -48,7 +47,7 @@ esttab mlr1 mlr2 mlr3 mlr4 using "stata_out/Stock Returns over the FOMC cycle Re
 	mlabels("2016-2019" "2019-2022" "2016-2023" "1994-2023") ///
 	postfoot("significant at 1\%-level (***), 5\% level (**), 10\% level (*)")
 
-// European Stock Returns over the FOMC Cycle - Measurement and Estimation Analysis (MEA)
+// European Stock Returns over the FOMC Cycle - Statistical Analysis
 clear
 import delimited "FOMC_dummy_generation/fomc_week_dummies_1994_nov2023.csv", clear
 sort date

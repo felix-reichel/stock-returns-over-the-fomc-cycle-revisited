@@ -1,13 +1,13 @@
 \chapter{Appendix}
 
-\section{R Code: Dummy Generation}
+\section{R Code: FOMC Dummy Generation}
 \label{app:fomc_code}
 
-The R code in this section, provided in Listing~\ref{lst:fomc_code}, generates FOMC week dummy variables based on the defined FOMC cycle patterns. The resulting data frame is then saved to a CSV file.
+The R code in this section, provided in listing~\ref{lst:fomc_code}, generates FOMC week dummy variables based on the defined FOMC cycle patterns. The resulting data frame is then saved to a CSV file.
 
 \lstinputlisting[caption={R code for FOMC Week Dummy Generation}, label={lst:fomc_code}]{../FOMC_dummy_generation/generate_fomc_cycle_dummies.R}
 
-\subsection{CSV File: Example structure of generated dummies}
+\subsection{CSV File: Example structure of generated FOMC dummy variables}
 \label{app:first_35_lines_csv}
 
 The listing~\ref{lst:first_35_lines_csv} displays the first 35 examples of the generated FOMC dummies in the CSV file,  containing approximately one FOMC cycle consisting of 7 work-weeks:
@@ -17,17 +17,16 @@ The listing~\ref{lst:first_35_lines_csv} displays the first 35 examples of the g
 \section{R Code: Tests}
 \label{app:fomc_code}
 
-The provided test, implemented with the \texttt{testthat} package in R, is designed to assess the accuracy of the \texttt{get\_fomc\_day\_within\_fomc\_cycle} function. In this test scenario, a reference FOMC meeting date, set to "2014-01-28" (\texttt{fomc\_test\_date}), serves as the basis for evaluating the function's output for various input dates. The expectations are explicitly defined for different scenarios, encompassing dates preceding, matching, and succeeding the FOMC meeting date. The function is expected to return negative values for dates before the meeting, indicating the number of days prior, 0 for the meeting date itself, and positive values for dates afterward, denoting the days post-meeting. Importantly, the test accounts for weekends, with the function expected to return \texttt{NULL} for input dates falling on Saturdays or Sundays. By assessing the function's behavior across this range of conditions, the test aims to ensure the accurate functioning of \texttt{get\_fomc\_day\_within\_fomc\_cycle} in relation to FOMC meeting dates and weekends, contributing to the overall verification of its correctness and robustness.
+The provided test (see listing~\ref{lst:fomc_gen_test}), implemented with the \texttt{testthat} package in R, is designed to assess the accuracy of the \texttt{get\_fomc\_day\_within\_fomc\_cycle} function. In this test scenario, a reference FOMC meeting date, set to "2014-01-28" (\texttt{fomc\_test\_date}), serves as the basis for evaluating the function's output for various input dates. The expectations are explicitly defined for different scenarios, encompassing dates preceding, matching, and succeeding the FOMC meeting date. The function is expected to return negative values for dates before the meeting, indicating the number of days prior, 0 for the meeting date itself, and positive values for dates afterward, denoting the days post-meeting. Importantly, the test accounts for weekends, with the function expected to return \texttt{NULL} for input dates falling on Saturdays or Sundays. By assessing the function's behavior across this range of conditions, the test aims to ensure the accurate functioning of \texttt{get\_fomc\_day\_within\_fomc\_cycle} in relation to FOMC meeting dates and weekends, contributing to the overall verification of its correctness and robustness.
 
 
-\lstinputlisting[caption={R code for FOMC Cycle Dummy Generation Tests}, label={lst:fomc_code}]{../FOMC_dummy_generation/tests/test_generate_fomc_cycle_dummies.R}
-
+\lstinputlisting[caption={R code for FOMC Cycle Dummy Generation Tests}, label={lst:fomc_gen_test}]{../FOMC_dummy_generation/tests/test_generate_fomc_cycle_dummies.R}
 
 
 \section{R Code: Fama-French Daily Factors Data Extraction}
 \label{app:r_code}
 
-The following R Code reads the Fama-French daily factors data from a CSV file, extracts data within a specified date range, and writes the subsetted data to a new CSV file named \texttt{us\_returns\_df\_1994\_oct2023.csv}.
+The following R Code in listing~\ref{lst:r_code} reads the Fama-French daily factors data from a CSV file, extracts data within a specified date range, and writes the subsetted data to a new CSV file named \texttt{us\_returns\_df\_1994\_oct2023.csv}.
 
 \begin{singlespace}
 
@@ -64,42 +63,40 @@ write.csv(
 \end{singlespace}
 
 
-\section{STATA Code: Measurement and Estimation Analysis (MEA)}
+\section{STATA Code: Statistical Analysis }
 \label{app:stata_code}
 
-This STATA code provided in Listing~\ref{lst:stata_code} conducts an analysis of stock returns in relation to FOMC meetings. The focus extends to both U.S. and European stock returns, with the code structured into sections:
+This STATA code provided in listing~\ref{lst:stata_code} conducts an analysis of stock returns in relation to FOMC meetings. The focus extends to both U.S. and European stock returns, with the code structured into following sections:
 
-\textbf{Environment Setup:}
+\textbf{Setup}
 \begin{itemize}
     \item Clears existing data and configures preferences.
     \item Initializes a log file for documentation.
 \end{itemize}
 
-\textbf{Data Import and Preprocessing:}
+\textbf{Data Import and Preprocessing}
 \begin{itemize}
     \item Imports FOMC meeting dates and U.S. stock return data.
     \item Merges datasets based on the date variable.
     \item Converts the date variable to a standardized format.
 \end{itemize}
 
-\textbf{Calculation of Excess Stock Returns:}
+\textbf{Calculation of Excess Stock Returns}
 \begin{itemize}
     \item Computes excess stock returns using the methodology from Cieslak et al. (2019).
 \end{itemize}
 
-\textbf{Statistical Analysis (MEA):}
+\textbf{Statistical Analysis}
 \begin{itemize}
     \item Performs regression analyses on excess stock returns for various time periods.
     \item Utilizes the \texttt{eststo} command to store regression results.
 \end{itemize}
 
-\textbf{Output Generation:}
+\textbf{Output Generation}
 \begin{itemize}
     \item Outputs regression results in LaTeX format, generating tables for different analysis periods.
-    \item Replicates the entire analysis for European stock returns.
+    \item Replicates the statistical analysis for European stock returns.
 \end{itemize}
 
-
-
-\lstinputlisting[caption={STATA code for Measurement and Estimation Analysis}, label={lst:stata_code}]{../stock_returns_over_the_fomc_cycle_revisited.do}
+\lstinputlisting[caption={STATA code for Statistical Analysis}, label={lst:stata_code}]{../stock_returns_over_the_fomc_cycle_revisited.do}
 
