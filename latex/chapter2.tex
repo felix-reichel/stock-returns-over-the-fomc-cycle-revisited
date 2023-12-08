@@ -3,35 +3,37 @@
 
 \section{The FOMC Cycle}
 
-The FOMC meets approximately every eight weeks during the year,  resulting in an FOMC cycle time of approximately 7 weeks (excluding weekends) most of the time since a year has 52 weeks. The authors, therefore, define FOMC cycle time week dummy variables for week 0 as days -1 to 3, week 1 as days 4 to 8, and week 6 as days 29 to 33. Worth mentioning is that the authors drop 3 days, which would be in FOMC cycle week 7 from their investigation, and that the number of available data points decreases for FOMC dummies (meaning 920 days in week 0,  924 days in week 2,  831 days in week 4,  120 days in week 6 for the relevant timespan from 1994 to 2016).
+The FOMC meets approximately every eight weeks during the year,  resulting in an FOMC cycle time of approximately 7 weeks (excluding weekends) most of the time since a year has 52 weeks. The authors, therefore, define FOMC cycle time week dummy variables for week 0 as days -1 to 3, week 1 as days 4 to 8,  week 2 as days 9 to 13, week 3 as days 14 to 18, week 4 as days 19 to 23, week 5 as days 24 to 28 and week 6 as days 29 to 33. It is worth mentioning that the authors drop 3 days which would be beyond FOMC cycle week 7 from their investigation for simplicity purposes. Furthermore that the number of available data points decreases for FOMC dummies (meaning 920 days in week 0,  924 days in week 2,  831 days in week 4,  120 days in week 6 for the relevant timespan from 1994 to 2016).
 
 \label{cies19_fig2}
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/cies19/fig2}
-    \caption{Frequency of FOMC meetings during the year from 1994 to 2016 \parencite{cieslak_stock_2019}}
+    \caption{Frequency of FOMC meetings during the year from 1994 to 2016 (\cite{cieslak_stock_2019}, 2019)}
 \end{figure}
 
 
 \section{Institutional Setting}
 
-The Federal Reserve System is comprised of the Board of Governors, 12 Federal Reserve Banks, and the FOMC. The FOMC's 12 members are responsible for implementing monetary policy to achieve macroeconomic goals, such as adjusting Federal fund rates and conducting large-scale purchases of treasury securities and Federal agency-issued or guaranteed securities since the 2008 financial crisis as policy tools to lower long-term interest rates, ensuring the functioning of the U.S. economy.\footnote{\url{https://www.Federalreserve.gov/abouttheFED.htm}}. 
+The Federal Reserve System is comprised of the Board of Governors, 12 Federal Reserve Banks, and the FOMC. The FOMC's 12 members are responsible for implementing monetary policy to achieve macroeconomic goals, such as adjusting FFR and conducting large-scale purchases of treasury securities and Federal agency-issued or guaranteed securities since the 2008 financial crisis as policy tools to lower long-term interest rates, ensuring the functioning of the U.S. economy.\footnote{\url{https://www.Federalreserve.gov/abouttheFED.htm}}. 
 
 \section{FOMC Data}
 
 The FOMC publishes detailed records of its meeting proceedings on the Federal Reserve's webpage\footnote{\url{https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm}}.  
-The transcripts have been produced by the FOMC Secretariat shortly after every meeting since the year 1994.
+The transcripts are produced by the FOMC Secretariat shortly after every meeting since the year 1994.
 The meeting participants have the opportunity to review the transcripts for accuracy within the subsequent weeks. 
-These transcripts are available on the Federal Reserves webpage and contain a very small amount of confidential information that may be deleted. 
+These transcripts are available on the Federal Reserve's webpage and contain a very small amount of confidential information that may be deleted. 
 The FOMC also issues a policy statement after each meeting,  summarizing the economic outlook and their policy decisions. 
 The Chairman holds press briefings to discuss policy decisions and economic projections. 
 The minutes of the meetings are released three weeks after every regular meeting, and the meeting transcripts are accessible for up to five years after the meeting.
 
-\section{Statistical Analysis}
+\section{Econometric Approach}
 
-\subsection{MLR model}
+In order to conduct my analysis whether the FOMC cycle pattern is still relevant concerning financial market returns, I re-estimate a linear regression model as defined in (\cite{cieslak_stock_2019},  2019) and extend their analysis till november 2023 for various sample periods.
 
-One relevant multiple linear regression (MLR) model with dummy variables for even FOMC cycle weeks as in \parencite{cieslak_stock_2019} can be defined as:
+\subsection{Linear regression model}
+
+\cite{cieslak_stock_2019} (2019) estimate a linear regression model as:
 \begin{equation}
 	ex1_{i}=\beta_{0}+D_0*\gamma_{1}+D_1*\gamma_{2}+\epsilon_i
 \end{equation}
@@ -39,25 +41,25 @@ where
 \begin{equation}
     D_0=
     \begin{cases}
-      1, & \text{If in week 0 of FOMC cycle time}\\
-      0, & \text{Otherwise}
+      1& \text{in week 0 of FOMC cycle time}\\
+      0& \text{otherwise}
     \end{cases}
 \end{equation}
-is a function equal to 1 if the FOMC cycle dummy is in week 0,
+is a dummy equal to 1 if the FOMC cycle is in week 0,
 \begin{equation}
     D_1=
     \begin{cases}
-      1, & \text{If in week 2,4 or 6 of FOMC cycle time. } \\
-      0, & \text{Otherwise}
+      1 & \text{ in week 2,4 or 6 of FOMC cycle time} \\
+      0 & \text{ otherwise}
     \end{cases}
 \end{equation}
-is a function equal to 1 if the FOMC cycle dummy is in week 2,  4 or 6,
+is a dummy equal to 1 if the FOMC cycle is in week 2,  4 or 6,
 $ {ex1_{i}} $ are the 1-day risk-free excess returns on stocks,
 $ { \hat{\beta_{0}} } $ is the OLS-estimated intercept,
-$ { \hat{\gamma_{1}}, \hat{\gamma_{2}} } $  are OLS-estimated coefficients and
+$ { \hat{\gamma_{1}}, \hat{\gamma_{2}} } $  are OLS-estimated coefficients on the dummies and
 $ { \epsilon_i \; \sim \; i.i.d.  \; \mathcal{N}\left(0, \sigma^2 \right) } $
-are independent identically distributed OLS-estimated standard errors. 
-The OLS-estimated coefficient $ {\hat{\gamma_{1}}} $ is of more importance with subject to the probability of target changes between meetings. (see figure 2.3)
+are independent identically distributed OLS-estimated residuals. 
+The coefficient $ {\hat{\gamma_{1}}} $ is of more importance with subject to the probability of target changes between meetings. (see figure 2.3)
 
 \subsection{FOMC dummies}
 
@@ -68,25 +70,25 @@ generates FOMC week dummy variables by using the \texttt{"FOMC\_Cycle\_dates\_19
 
 The analysis commences with the importation and organization of two datasets. 
 The first dataset, identified as \texttt{fomc\_data}, is loaded from the file \texttt{fomc\_week\_dummies\_1994\_nov2023.csv}. 
-This dataset includes information related to FOMC week dummies spanning from November 1994 to November 2023. The data is sorted by date, and the sorted dataset is then saved as \texttt{d:fomc\_data}, thereby replacing any pre-existing file.
+This dataset includes information related to FOMC week dummies spanning November 1994 to November 2023. The data is sorted by date, and is then saved as \texttt{d:fomc\_data}, thereby replacing any pre-existing file.
 
-Following this, the second dataset, labeled as \texttt{us\_returns\_data}, is imported from the file \texttt{us\_returns\_df\_1994\_oct2023.csv}. This dataset contains information regarding Fama-French factors for the U.S. market, covering the period from October 1994 to October 2023. Similar to the first dataset, it undergoes sorting by date, and the sorted dataset is saved as \texttt{d:us\_returns\_data}, replacing any existing file.
+Following this, the second dataset, labeled as \texttt{us\_returns\_data}, is imported from the file \texttt{us\_returns\_df\_1994\_oct2023.csv}. This dataset contains information about/on the Fama-French factors for the U.S. market, covering the period from October 1994 to October 2023. Similar to the first dataset, it undergoes sorting by date, and the sorted dataset is saved as \texttt{d:us\_returns\_data}, replacing any existing file.
 
 To consolidate the information, a merge operation is executed using the "date" variable as the key. This operation combines the \texttt{fomc\_data} and \texttt{us\_returns\_data} datasets into a new dataset named \texttt{FED\_Put\_datamerged\_data}. The merged dataset is saved as \texttt{d:FED\_Put\_datamerged\_data}, effectively replacing any prior file.
 
-Finally, a new variable named \texttt{date2} is generated by transforming the existing "date" variable using the \texttt{date()} function with the "YMD" (year-month-day) format. The resulting dataset is now then used for further analysis, incorporating information from both the FOMC week dummies and U.S. market returns datasets.
+Finally, a new variable named \texttt{date2} is generated by transforming the existing "date" variable using the \texttt{date()} function with the "YMD" (year-month-day) format. The resulting dataset then is used for further analysis, incorporating information from both the FOMC week dummies and U.S. market returns datasets.
 
 \subsection{Calculation of stock excess returns}
 
-Excess stock returns are calculated using the Fama-French 3-factor model developed by Kenneth R. French and Eugene Fama.  
-Data for US market returns for this model and also for various other markets (e.g., European, Asia) get published regularly on Kenneth R. French's webpage\footnote{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}.
+Excess stock returns are calculated using the Fama-French 3-factors US research data provided by Kenneth R. French.
+Data for US market returns for this model and also for various other markets (e.g., European, Asia) are regularly published regularly on Kenneth R. French's webpage\footnote{\url{https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/data_library.html}}.
 
-If \(m\) represents \(1 + \text{{stock return}}\) and \(r\) denote \(1 + \text{{bill return}}\), the 1-day excess return (\text{{ex1}}) is calculated by subtracting \(r\) from \(m\) and multiplying the result by 100, which can be expressed as \(\text{{ex1}} = 100 \times (m - r)\). 
-The 5-day excess return (\text{{ex5}}) is comPuted over a rolling 5-day window, involving the product of five consecutive values of \(m\) and \(r\). The formula is given by \(\text{{ex5}} = 100 \times (m \times m_{t+1} \times m_{t+2} \times m_{t+3} \times m_{t+4} - r \times r_{t+1} \times r_{t+2} \times r_{t+3} \times r_{t+4})\).
+If \(m\) represents \(1 + \text{{stock return}}\) and \(r\) denotes \(1 + \text{{bill return}}\), the 1-day excess return (\text{{ex1}}) is calculated by subtracting \(r\) from \(m\) and multiplying the result by 100, which can be expressed as \(\text{{ex1}} = 100 \times (m - r)\). 
+The 5-day excess return (\text{{ex5}}) is computed over a rolling 5-day window, involving the product of five consecutive values of \(m\) and \(r\), respectively. The formula is given by \(\text{{ex5}} = 100 \times (m \times m_{t+1} \times m_{t+2} \times m_{t+3} \times m_{t+4} - r \times r_{t+1} \times r_{t+2} \times r_{t+3} \times r_{t+4})\).
 Furthermore, \(t\) represents the observation number in the dataset. 
 
-Overall, the calculation for evaluating stock excess returns provides insight into their 
-performance relative to the risk-free rate.
+Accordingly, the calculation of stock excess returns provides insight into their 
+performance relative to the risk-free rate (using 1-day excess returns and 5-day excess returns graphically).
 
 \subsection{Regression Results}
 
@@ -97,7 +99,7 @@ performance relative to the risk-free rate.
 \end{tabular}
 }
 \end{adjustbox}
-\caption{\label{table_1} Replication results of Table 1 Panel A as in \parencite{cieslak_stock_2019}}
+\caption{\label{table_1} Replication results of Table 1 Panel A as in (\cite{cieslak_stock_2019}, 2019) using as above specified econometric approach and from FOMC meeting dates generated FOMC dummies using R code matching FOMC Cycle definitions as in (\cite{cieslak_stock_2019}, 2019).  }
 \end{center}
 \end{table}
 
@@ -145,11 +147,11 @@ performance relative to the risk-free rate.
         \toprule
         & Dummy = 1 in Week 0 & Dummy = 1 in Week 2, 4, 6 \\
         \midrule
-         (1) Pre Covid-19 &&\\
+         (1) Pre COVID-19 &&\\
          2016-2019 (US) & -0.211** & -0.0487 \\
          2016-2019 (Europe) & -0.106 & 0.00678  \\
          \addlinespace
-        (2) Post/During Covid-19&&\\
+        (2) Post/During COVID-19&&\\
         2019-2022 (US) & -0.0952 & 0.0578 \\
         2019-2022 (Europe) & -0.0641 & 0.111 \\
             \addlinespace
@@ -166,12 +168,12 @@ performance relative to the risk-free rate.
 
 The regression coefficients in Table \ref{table_1},  \ref{table_2},  \ref{table_3} and \ref{table_4} are reported with t-Statistics robust to heteroskedasticity in parentheses.
 The coefficients for dummy variables in Table \ref{table:table_5} show distinct patterns between US and European stock 1-day excess returns over the FOMC cycle time.
-In the pre-covid sample period 2016-2019 (1), the coefficient for Dummy = 1 in Week 0 is -0.211 (statistically significant at the 5\%-level) for US stocks compared to -0.106 (statistically insignificant) for European stock returns.
-For Dummy = 1 in Week 2, 4, 6, the US coefficient is -0.0487 compared to 0.00678 (both statistically insignificant) for European stock excess returns.  Similar contrasting patterns in coefficients persist in the subsequent periods 2019-2022 (2), 2016-2023 (3), and 1994-2023 (4), emphasizing the slightly nuanced responses of US and European stock markets with respect to FOMC cycle-related events.
+In the pre-covid sample period 2016-2019 (1), the coefficient on the week-0 dummy is -0.211 (statistically significant at the 5\%-level) for US stocks compared to -0.106 (statistically insignificant) for European stock returns.
+For the coefficient on the dummy for weeks 2, 4, 6, the US coefficient is -0.0487 compared to 0.00678 (both statistically insignificant) for European stock excess returns.  Similar contrasting patterns in coefficients persist in the subsequent periods 2019-2022 (2), 2016-2023 (3), and 1994-2023 (4), emphasizing the slightly nuanced responses of US and European stock markets with respect to FOMC cycle-related events.
 
 % Answer Q.: Does the stylized fact of stock excess returns are mainly achieved in FOMC even weeks (0,  2,  4,  6) from 2016 onwards still persist?
 
-In the first sample from 2016 onwards (1), where the coefficient for the term for FOMC cycle week 0 is statistically significant on the 5\%-level, the sign of the coefficient turned negative, which is in a consonant with a market dynamic labeled by the media as a so-called "FED Call".\footnote{\url{https://www.economist. com/finance-and-economics/2022/07/21/the-fed-put-morphs-into-a-fed-call.}} Looking at the whole period from 1994 to 2023 (4), the regression coefficient of the FOMC cycle pattern turns out to be significantly smaller.  All samples from COVID-19 onwards seem to be statistically insignificant so far, suggesting that the FOMC cycle pattern has probably decreased or vanished.
+In the first sample from 2016 onwards (1) the coefficient on the week-0 dummy is statistically significant on the 5\%-level, the sign of the coefficient turned negative, which is in consonant with a market dynamic labeled by the media as a so-called "FED Call".\footnote{\url{https://www.economist. com/finance-and-economics/2022/07/21/the-fed-put-morphs-into-a-fed-call.}} Looking at the whole period from 1994 to 2023 (4), the regression coefficient of the FOMC cycle pattern turns out to be significantly smaller.  All samples from COVID-19 onwards seem to be statistically insignificant so far, suggesting that the FOMC cycle pattern has probably decreased or vanished.
 
 
 %\subsection{European Stock Returns over the FOMC Cycle from 2016 onwards }
