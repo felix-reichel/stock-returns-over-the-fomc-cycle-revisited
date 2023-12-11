@@ -90,8 +90,14 @@
 \usepackage{hyperref}
 \usepackage{xurl}
 
-\usepackage{newtxtext}
-\usepackage{newtxmath}
+% Add one-half spacing to the table of contents
+\addtocontents{toc}{\protect\onehalfspacing}
+\addtocontents{lof}{\protect\onehalfspacing}
+\addtocontents{lot}{\protect\onehalfspacing}
+\addtocontents{appendix}{\protect\onehalfspacing}
+
+%\usepackage{newtxtext}
+%\usepackage{newtxmath}
 
 % Define dark grey color
 \definecolor{mydarkblue}{RGB}{0,0,128}
@@ -108,6 +114,7 @@
 
 \let\oldhref\href
 \renewcommand{\href}[2]{\oldhref{#1}{\bfseries}}
+
 
 
 % Adds package adjustbox
@@ -192,6 +199,9 @@
 %%%%
 %%%%%%%%
 %%%%%%%%%%%%%%%%
+% Set one-half spacing for the entire document
+\onehalfspacing
+
 \begin{document}
 %%%%%%%%%%%%%%%%
 
