@@ -9,7 +9,7 @@ The FOMC meets approximately every eight weeks during the year,  resulting in an
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.75\textwidth]{figures/cies19/fig2}
-    \caption{Frequency of FOMC meetings during the year from 1994 to 2016 (\cite{cieslak_stock_2019}, 2019)}
+    \caption{Frequency of FOMC meetings during the year from 1994 to 2016 ( \hyperref[item:cieslak_stock_2019]{Cieslak et. al (2019)} )}
 \end{figure}
 
 
@@ -29,11 +29,11 @@ The minutes of the meetings are released three weeks after every regular meeting
 
 \section{Econometric Approach}
 
-In order to conduct my analysis whether the FOMC cycle pattern is still relevant concerning financial market returns, I re-estimate a linear regression model as defined in (\cite{cieslak_stock_2019},  2019) and extend their analysis till november 2023 for various sample periods.
+In order to conduct my analysis whether the FOMC cycle pattern is still relevant concerning financial market returns, I re-estimate a linear regression model as defined in \hyperref[item:cieslak_stock_2019]{Cieslak et. al (2019)} and extend their analysis till november 2023 for various sample periods.
 
 \subsection{Linear regression model}
 
-\cite{cieslak_stock_2019} (2019) estimates a linear regression model as:
+\hyperref[item:cieslak_stock_2019]{Cieslak et. al (2019)} estimates a linear regression model as:
 \begin{equation}
 	ex1_{i}=\beta_{0}+D_0*\gamma_{1}+D_1*\gamma_{2}+\epsilon_i
 \end{equation}
@@ -69,10 +69,11 @@ generates FOMC week dummy variables by using the \texttt{"FOMC\_Cycle\_dates\_19
 \subsection{Data Preprocessing}
 
 The analysis commences with the importation and organization of two datasets. 
-The first dataset, identified as \texttt{fomc\_data}, is loaded from the file \texttt{fomc\_week\_dummies\_1994\_nov2023.csv}. 
+The first dataset, identified as \texttt{fomc\_data}, is loaded from the file \\
+\texttt{fomc\_week\_dummies\_1994\_nov2023.csv}. 
 This dataset includes information related to FOMC week dummies spanning November 1994 to November 2023. The data is sorted by date, and is then saved as \texttt{d:fomc\_data}, thereby replacing any pre-existing file.
 
-Following this, the second dataset, labeled as \texttt{us\_returns\_data}, is imported from the file \texttt{us\_returns\_df\_1994\_oct2023.csv}. This dataset contains information about/on the Fama-French factors for the U.S. market, covering the period from October 1994 to October 2023. Similar to the first dataset, it undergoes sorting by date, and the sorted dataset is saved as \texttt{d:us\_returns\_data}, replacing any existing file.
+Following this, the second dataset, labeled as \texttt{us\_returns\_data}, is imported from the file \\ \texttt{us\_returns\_df\_1994\_oct2023.csv}. This dataset contains information about/on the Fama-French factors for the U.S. market, covering the period from October 1994 to October 2023. Similar to the first dataset, it undergoes sorting by date, and the sorted dataset is saved as \texttt{d:us\_returns\_data}, replacing any existing file.
 
 To consolidate the information, a merge operation is executed using the "date" variable as the key. This operation combines the \texttt{fomc\_data} and \texttt{us\_returns\_data} datasets into a new dataset named \texttt{FED\_Put\_datamerged\_data}. The merged dataset is saved as \texttt{d:FED\_Put\_datamerged\_data}, effectively replacing any prior file.
 
@@ -99,7 +100,7 @@ performance relative to the risk-free rate (using 1-day excess returns and 5-day
 \end{tabular}
 }
 \end{adjustbox}
-\caption{\label{table_1} Replication results of Table 1 Panel A as in (\cite{cieslak_stock_2019}, 2019) using as above specified econometric approach and from FOMC meeting dates generated FOMC dummies using R code matching FOMC Cycle definitions as in (\cite{cieslak_stock_2019}, 2019).  }
+\caption{\label{table_1} Replication results of Table 1 Panel A as in \hyperref[item:cieslak_stock_2019]{Cieslak et. al (2019)} using as above specified econometric approach and from FOMC meeting dates generated FOMC dummies using R code matching FOMC Cycle definitions as in \hyperref[item:cieslak_stock_2019]{Cieslak et. al (2019)}.  }
 \end{center}
 \end{table}
 

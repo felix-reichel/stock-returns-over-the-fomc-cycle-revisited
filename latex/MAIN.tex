@@ -33,22 +33,22 @@
 
 \NeedsTeXFormat{LaTeX2e}[2019-10-01]
 \documentclass[%
-	a4paper,
-	11pt,
-	BCOR=10mm,
-	DIV=12,
-	headinclude,
-	headheight=16mm,
-	oneside,
-	onecolumn,
-	openany,
-	parskip=half,
-	% appendixprefix,
-	% toc=flat,
-	chapterentrydots=true,
-	table,
-	fleqn,
-	%draft
+    a4paper,
+    12pt,
+    %BCOR=10mm, % Increased BCOR for a larger binding correction
+    DIV=16, % Adjusted DIV for a wider text block
+    headinclude,
+    headheight=5mm, % Adjusted headheight for more space
+    oneside,
+    onecolumn,
+    openany,
+    parskip=half,
+    % appendixprefix,
+    % toc=flat,
+    chapterentrydots=true,
+    table,
+    fleqn,
+    %draft
 ]{scrbook}
 
 \usepackage[utf8]{inputenc}
@@ -68,9 +68,9 @@
 \usepackage{amsmath,siunitx}
 \usepackage[%
 	backend=biber,
-	style=chicago-authordate,
-	bibstyle=chicago-authordate,
-	citestyle=chicago-authordate,
+	style=authoryear,
+	bibstyle=authoryear,
+	citestyle=authoryear,
 	maxcitenames=2,
 	sorting=nty,
 	hyperref=true,
@@ -90,12 +90,24 @@
 \usepackage{hyperref}
 \usepackage{xurl}
 
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+
+% Define dark grey color
+\definecolor{mydarkblue}{RGB}{0,0,128}
+
 \hypersetup{
-    colorlinks=false,
-    linkcolor=black,    % color for internal links
-    citecolor=black,    % color for citations
-    urlcolor=black      % color for URLs
+    colorlinks=true,
+    linktoc=none,
+    linkcolor=mydarkblue,    % color for internal links
+    citecolor=mydarkblue,    % color for citations
+    urlcolor=black  % color for URLs\\
 }
+
+\renewcommand\UrlFont{\color{black}\bfseries}
+
+\let\oldhref\href
+\renewcommand{\href}[2]{\oldhref{#1}{\bfseries}}
 
 
 % Adds package adjustbox
