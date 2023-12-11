@@ -88,6 +88,15 @@
 \usepackage{subfiles}
 \usepackage{scrhack}
 \usepackage{hyperref}
+\usepackage{xurl}
+
+\hypersetup{
+    colorlinks=false,
+    linkcolor=black,    % color for internal links
+    citecolor=black,    % color for citations
+    urlcolor=black      % color for URLs
+}
+
 
 % Adds package adjustbox
 \usepackage{adjustbox}
@@ -201,7 +210,10 @@
 
 %%%%%%%%%%%%%%%%%%
 \nocite{*}
-\printbibliography
+
+%\printbibliography
+
+\input{bibliography.tex}
 
 %%%%%%%%%
 \appendix
